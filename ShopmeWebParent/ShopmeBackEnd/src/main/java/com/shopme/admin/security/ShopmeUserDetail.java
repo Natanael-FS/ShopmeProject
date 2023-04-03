@@ -18,13 +18,11 @@ public class ShopmeUserDetail implements UserDetails{
 	private User user;
 
 	public ShopmeUserDetail(User user) {
-		super();
 		this.user = user;
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
 		Set<Role> roles = user.getRoles();
 		
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -43,7 +41,6 @@ public class ShopmeUserDetail implements UserDetails{
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
 		return user.getEmail();
 	}
 
@@ -54,20 +51,31 @@ public class ShopmeUserDetail implements UserDetails{
 
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
 		return user.isEnabled();
 	}
 
+	/*
+	  public String getFullname() {
+		return this.user.getFirstName() + " " + this.user.getLastName();
+	}
+	
+	public void setFirstName(String firstName) {
+		this.user.setFirstName(firstName);
+	}
+
+	public void setLastName(String lastName) {
+		this.user.setLastName(lastName);
+	}	
+
+	 */
 }

@@ -122,5 +122,27 @@ public class UserService {
 	{
 		userRepository.updateEnabledStatus(id, enabled);
 	}
+
+	public User getByEmail(String email) {
+		return userRepository.getUserByEmail(email);
+	}
+
+	public User updateAccount(User userInForm) {
+		User userInDB = userRepository.findById(userInForm.getId()).get();
+
+		if (!userInForm.getPassword().isEmpty()) {
+			userInDB.setPassword(userInForm.getPassword());
+			encodePassword(userInDB);
+		}
+
+		if (userInForm.getPhotos() != null) {
+			userInDB.setPhotos(userInForm.getPhotos());
+		}
+
+		userInDB.setFirstName(userInForm.getFirstName());
+		userInDB.setLastName(userInForm.getLastName());
+
+		return userRepository.save(userInDB);
+	}
 	
 }

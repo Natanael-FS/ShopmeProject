@@ -109,17 +109,13 @@
 		[[${message}]]
 	</div>
 	
-	
-	
 	<div>
 		<form th:action="@{/users/page/1}" class="form-inline m-3">
 			Filter : &nbsp;
 			<input type="hidden" name="sortField" th:value="${sortField}"/>
 			<input type="hidden" name="sortDir" th:value="${sortDir}"/>
-		
 			<input type="search" name="keyword" th:value="${keyword}" class="form-control" required/>
 			&nbsp;&nbsp;
-			
 			<button type="submit" value="Search" class="btn btn-primary">
 				<i class="fa-solid fa-magnifying-glass"></i> 
 			</button>
@@ -130,73 +126,76 @@
 		</form>
 	</div>
 	
-	<div>
-		<table class="table table-bordered table-hover table-striped table-responsive-xL">
-			<thead class ="thead-dark">
-				<tr>
-					<th th:replace="fragments :: column_link('id', 'User ID')" />						
-					
-					<th>
-						Photos
-					</th>
-					
-					<th th:replace="fragments :: column_link('email', 'Email')" />		
+	<div class="full-details">
+			<table class="table table-bordered table-hover table-striped table-responsive-xL">
+				<thead class ="thead-dark">
+					<tr>
+						<th class="hideable-column">
+							<th th:replace="fragments :: column_link('id', 'User ID', 'tag')" />
+						</th>
+						<th>
+							Photos
+						</th>
 						
-
-					<th th:replace="fragments :: column_link('firstName', 'First Names')" />		
-					
-					
-					<th th:replace="fragments :: column_link('lastName', 'Last Names')" />		
-					
-					<th>
-						Roles
-					</th>
-					
-						<th th:replace="fragments :: column_link('enabled', 'Enabled')" />		
-					
-					<th>  </th>
-
-				</tr>
-
-			</thead>
-			<tbody>
-					<tr th:each="user : ${listUsers}">
-						<td>[[${user.id}]]</td>
-						<td>
-							<span th:if="${user.photos == null}" class="fa-solid fa-image-portrait fa-5x icon-silver"></span>
-							<img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}" style="width:100px" th:align="center"/>
-						</td>
-						<td>[[${user.email}]]</td>
-						<td>[[${user.firstName}]]</td>
-						<td>[[${user.lastName}]]</td>
-						<td>[[${user.roles} ]]</td>
+						<th class="hideable-column">
+							<th th:replace="fragments :: column_link('email', 'E-mail', 'tag')" />
+						</th>					
+	
+						<th th:replace="fragments :: column_link('firstName', 'First Name', 'none')" />
+						<th th:replace="fragments :: column_link('lastName', 'Last Name', 'none')" />	
 						
-						<td>
-						<a th:if="${user.enabled == true}" class="fas fa-check-circle fa-2x icon-green" 
-							th:href="@{'/users/' + ${user.id} + '/enabled/false'}"
-							title="Disable this user"
-							></a>
-						<a th:if="${user.enabled == false}" class="fas fa-check-circle fa-2x icon-dark" 
-							th:href="@{'/users/' + ${user.id} + '/enabled/true'}"
-							title="Enabled this user"
-							></a>
-						</td>
+						<th>
+							Roles
+						</th>
 						
-						<td>
-						<a class="fa-regular fa-pen-to-square fa-2x icon-green" th:href="@{'/users/edit/' + ${user.id}}"
-								  title ="Edit this user">  </a>
-						&nbsp; 						
-						<a class="fas fa-trash fa-2x icon-red link-delete" 
-						th:href="@{'/users/delete/' + ${user.id}}"
-						th:userId="${user.id}"; 
-								 title ="Delete this user">  </a>
-						
-						</td>
+						<th th:replace="fragments :: column_link('enabled', 'Enabled', 'none')" />						
+						<th>  </th>
+	
 					</tr>
-			</tbody>
-			
-		</table>
+	
+				</thead>
+				<tbody>
+						<tr th:each="user : ${listUsers}">
+							<td class="hideable-column">[[${user.id}]]</td>
+							<td>
+								<span th:if="${user.photos == null}" class="fa-solid fa-image-portrait fa-5x icon-silver"></span>
+								<img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}" style="width:100px" th:align="center"/>
+							</td>
+							<td class="hideable-column">[[${user.email}]]</td>
+							<td>[[${user.firstName}]]</td>
+							<td>[[${user.lastName}]]</td>
+							<td>[[${user.roles} ]]</td>
+							
+							<td>
+								<div th:replace="fragments :: user_status" />
+							</td>
+							
+							<td>
+								<div th:replace="fragments :: user_actions" />
+							</td>
+						</tr>
+				</tbody>
+				
+			</table>
 	</div>
+	
+	<div class="less-details">
+			<div th:each="user : ${listUsers}" class="row m-1">
+				<div class="col-4">
+					<div th:replace="fragments :: user_photos" />			
+				</div>
+				<div class="col-8">
+					<div></div>
+					<div>[[${user.roles}]]</div>
+					<div class="mt-2">
+						<div th:replace="fragments :: user_status" />
+						&nbsp; 			
+						<div th:replace="fragments :: user_actions" />
+					</div>
+				</div>
+				<div>&nbsp;</div>
+			</div>
+		</div>
 	
 	<div class="text-center m-1" th:if="${totalItems > 0}")>
 		<span>Showing User # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
@@ -207,7 +206,7 @@
 
 	<div th:if="${totalPages > 1}")>
 		<nav>
-		  <ul class="pagination justify-content-center">
+		  <ul class="pagination justify-content-center flex-wrap">
 		   <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
 		   		<a th:replace="fragments :: page_link(1, 'First')" >   </a>
 		   </li>

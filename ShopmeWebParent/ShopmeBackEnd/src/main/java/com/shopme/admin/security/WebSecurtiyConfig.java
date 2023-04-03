@@ -16,33 +16,40 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurtiyConfig {
+public class WebSecurtiyConfig extends WebSecurityConfigurerAdapter{
+
+		@Bean
+		public UserDetailsService userDetailsService() {
+			return new ShopmeUserDetailsService();
+		};
 		
 	    @Bean
 	    public BCryptPasswordEncoder passwordEncoder() {
 	        return new BCryptPasswordEncoder();
 	    }
 	    
-//		@Bean
-//		public UserDetailsService userDetailsService() {
-//			return new ShopmeUserDetailsService();
-//		};
-//	    
-//	    public DaoAuthenticationProvider authenticationProvider() {
-//	    	DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-//	    	authenticationProvider.setUserDetailsService(userDetailsService());
-//	    	authenticationProvider.setPasswordEncoder(passwordEncoder());
-//	    	System.out.println(authenticationProvider.toString());
-//	    	return authenticationProvider;
-//	    }
-//	 
-//	    @Override
-//		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//			auth.authenticationProvider(authenticationProvider());
-//	    }
-//
-//		@Override
-//	    protected void configure(HttpSecurity http) throws Exception {  
+	    public DaoAuthenticationProvider authenticationProvider() {
+	    	DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+	    	authenticationProvider.setUserDetailsService(userDetailsService());
+	    	authenticationProvider.setPasswordEncoder(passwordEncoder());
+	    	System.out.println(authenticationProvider.toString());
+	    	
+	    	return authenticationProvider;
+	    }
+	 
+	    @Override
+		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+			auth.authenticationProvider(authenticationProvider());
+	    }
+
+		@Override
+	    protected void configure(HttpSecurity http) throws Exception {  
+			http.authorizeRequests()
+			.anyRequest().authenticated()
+			.and()
+			.formLogin().loginPage("/login")
+			.usernameParameter("email")
+			.permitAll();
 //	        http.authorizeRequests()
 //	        .anyRequest()
 //	        .authenticated()
@@ -52,13 +59,14 @@ public class WebSecurtiyConfig {
 //	        .permitAll()
 //			.and()
 //			.logout().permitAll();;
-//	    }
-//		 
-//	    @Override
-//	    public void configure(WebSecurity  web) throws Exception {
-//	        web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**");
-//	    }
+	    }
+		 
+	    @Override
+	    public void configure(WebSecurity  web) throws Exception {
+	        web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**");
+	    }
 	    
+		/*
 		  @Bean protected SecurityFilterChain filterChain(HttpSecurity http) throws
 		  Exception { http.authorizeRequests().anyRequest().permitAll(); return
 		  http.build(); }
@@ -66,4 +74,5 @@ public class WebSecurtiyConfig {
 		  @Bean public WebSecurityCustomizer webSecurityCustomizer() {
 		  return (web) -> web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**");
 		  }
+		 */
 }
