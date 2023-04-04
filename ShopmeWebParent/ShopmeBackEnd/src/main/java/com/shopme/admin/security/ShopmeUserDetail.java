@@ -28,6 +28,7 @@ public class ShopmeUserDetail implements UserDetails{
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		
 		for (Role role : roles) {
+//			System.out.println("name : "+role.getName() + " desc : "+role.getDescription());
 			authorities.add(new SimpleGrantedAuthority(role.getName()));
 		}
 		
@@ -64,7 +65,6 @@ public class ShopmeUserDetail implements UserDetails{
 		return user.isEnabled();
 	}
 
-	/*
 	  public String getFullname() {
 		return this.user.getFirstName() + " " + this.user.getLastName();
 	}
@@ -77,5 +77,4 @@ public class ShopmeUserDetail implements UserDetails{
 		this.user.setLastName(lastName);
 	}	
 
-	 */
 }

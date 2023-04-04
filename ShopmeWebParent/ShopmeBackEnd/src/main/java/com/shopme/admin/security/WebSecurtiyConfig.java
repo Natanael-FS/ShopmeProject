@@ -32,7 +32,7 @@ public class WebSecurtiyConfig extends WebSecurityConfigurerAdapter{
 	    	DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 	    	authenticationProvider.setUserDetailsService(userDetailsService());
 	    	authenticationProvider.setPasswordEncoder(passwordEncoder());
-	    	System.out.println(authenticationProvider.toString());
+	    	System.out.println("authprov :: "+authenticationProvider.toString());
 	    	
 	    	return authenticationProvider;
 	    }
@@ -44,21 +44,20 @@ public class WebSecurtiyConfig extends WebSecurityConfigurerAdapter{
 
 		@Override
 	    protected void configure(HttpSecurity http) throws Exception {  
-			http.authorizeRequests()
-			.anyRequest().authenticated()
+	        http.authorizeRequests()
+	        .antMatchers("/users/**").hasAuthority("Admin")
+	        .anyRequest()
+	        .authenticated()
+	        .and().formLogin()
+	        .loginPage("/login")
+	        .usernameParameter("email")
+	        .permitAll()
 			.and()
-			.formLogin().loginPage("/login")
-			.usernameParameter("email")
-			.permitAll();
-//	        http.authorizeRequests()
-//	        .anyRequest()
-//	        .authenticated()
-//	        .and().formLogin()
-//	        .loginPage("/login")
-//	        .usernameParameter("email")
-//	        .permitAll()
-//			.and()
-//			.logout().permitAll();;
+			.logout().permitAll()
+			.and()
+			.rememberMe().key("AbcDefgKLDSLmvop_0123456789")
+			.tokenValiditySeconds(7 * 24 * 60 * 60)  // 7 days 24 hours 60 minutes 60 seconds -> 7days ;
+			;
 	    }
 		 
 	    @Override

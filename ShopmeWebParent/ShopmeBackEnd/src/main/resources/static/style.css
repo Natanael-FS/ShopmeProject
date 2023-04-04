@@ -23,3 +23,7 @@
 	div.less-details { display: none; }
 	.hideable-column { display: table-cell; }
 }
+
+.details-right{
+    text-align: right;
+}

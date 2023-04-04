@@ -19,11 +19,13 @@ public class ShopmeUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		User user = userRepository.getUserByEmail(email);
 		if (user != null) {
-			System.out.println(user.toString());
-			boolean passwordsMatch = new BCryptPasswordEncoder().matches("123456", user.getPassword());
-			boolean passwordsMatch2 = new BCryptPasswordEncoder().matches("123456", "123456");
-
-			System.out.println("isTrue :: "+passwordsMatch+" || "+passwordsMatch2);
+			/*
+			  System.out.println(user.toString()); boolean passwordsMatch = new
+			  BCryptPasswordEncoder().matches("123456", user.getPassword()); boolean
+			  passwordsMatch2 = new BCryptPasswordEncoder().matches("123456", "123456");
+			  
+			  System.out.println("isTrue :: "+passwordsMatch+" || "+passwordsMatch2);
+			 */
 			return new ShopmeUserDetail(user);
 		}
 		throw new UsernameNotFoundException("Could not find email ->" + email);

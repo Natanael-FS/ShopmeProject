@@ -11,7 +11,7 @@ public class PasswordEncoderTest {
 	public void testEndcodePassword() {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		
-		String rawPasswordString = "12345";
+		String rawPasswordString = "1234";
 		String encodedPassword = passwordEncoder.encode(rawPasswordString);
 		
 		System.out.println(encodedPassword);

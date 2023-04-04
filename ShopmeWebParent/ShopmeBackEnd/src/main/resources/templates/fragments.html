@@ -9,7 +9,7 @@
 
 	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
 	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
-	<link rel="stylesheet" type="text/css" th:href="@{/styles.css}" />		
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" />		
 	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}" ></script>
 	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" ></script>
 	<script type="text/javascript" th:src="@{/js/common.js}" ></script>
@@ -64,7 +64,7 @@
 		<a class="fas fa-edit fa-2x icon-green" th:href="@{'/users/edit/' + ${user.id}}" style="text-decoration: none;"
 			title="Edit this user"></a>
 		&nbsp; 
-		<a class="fas fa-trash fa-2x icon-dark link-delete" 
+		<a class="fas fa-trash fa-2x icon-red link-delete" 
 			th:href="@{'/users/delete/' + ${user.id}}"
 			th:userId="${user.id}"
 			title="Delete this user"></a>	

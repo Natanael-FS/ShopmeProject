@@ -113,37 +113,6 @@
 </div>
 
 <script type="text/javascript">
-	$(document).ready(function(){
-		$("#buttonCancel").on("click", function (){
-			window.location = "[[@{/users}]]";
-		});
-		
-		$("#fileimage").change(function(){
-			fileSize = this.files[0].size;
-			 
-				if(fileSize > 1048576){
-					this.setCustomValidity("File Size > 1 MB");
-					this.reportValidity();
-				}
-				else{
-					this.setCustomValidity("");
-					showImageThumbnail(this);
-				}
-			
-		});
-	});
-	
-	function showImageThumbnail(fileinput){
-		var file = fileinput.files[0];
-		var reader = new FileReader();
-		
-		reader.onload = function(e){
-				$("#thumbnail").attr("src", e.target.result);
-			}
-			reader.readAsDataURL(file);
-		};
-	
-	
 	function checkEmailUnique(form) { 
 		url = "[[@{/users/check_email}]]";
 		userId = $("#id").val();
@@ -174,11 +143,8 @@
 		$("#modalDialog").modal();
 
 	}
-	
-	
 </script>
-
+<script th:src="{/js/common_form.js}"></script>
 
 </body>
-
 </html>
