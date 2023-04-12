@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -34,6 +36,10 @@ import com.shopme.common.entity.User;
 public class UserController {
 	@Autowired	
 	private UserService userService;
+	
+	
+	private static final Logger log = LoggerFactory.getLogger(UserController.class);
+
 	
 	@GetMapping("/users")
 	public String listFirstPage(Model model) {
@@ -146,7 +152,7 @@ public class UserController {
 			model.addAttribute("pageTitle", "Edit User (ID : " + id + ")");
 			model.addAttribute("listRoles", listRoles);
 
-			return "users_form";			
+			return "users/users_form";			
 		} catch (UserNotFoundException ex) {
 			redirectAttributes.addFlashAttribute("message",ex.getMessage());
 			return "redirect:/users";
@@ -188,8 +194,9 @@ public class UserController {
 		List<User> listusers = userService.listAll();
 		
 		UserCsvExporter exporter = new UserCsvExporter();
+		log.info("UserController | exportToCSV | export is starting");
 		exporter.export(listusers, response);
-		
+		log.info("UserController | exportToCSV | export completed");		
 	}
 	
 	
@@ -198,17 +205,20 @@ public class UserController {
 		List<User> listusers = userService.listAll();
 		
 		UserExcelExporter exporter = new UserExcelExporter();
+		log.info("UserController | exportToExcel | export is starting");
 		exporter.export(listusers, response);
-		
-	}
+		log.info("UserController | exportToExcel | export completed");		
+	}		
+
 	
 	@GetMapping("/users/export/pdf")
 	public void exportToPdf(HttpServletResponse response) throws IOException {
 		List<User> listusers = userService.listAll();
 		
 		UserPdfExporter exporter = new UserPdfExporter();
+		log.info("UserController | exportToPdf | export is starting");
 		exporter.export(listusers, response);
-		
+		log.info("UserController | exportToPdf | export completed");		
 	}
 		
 }

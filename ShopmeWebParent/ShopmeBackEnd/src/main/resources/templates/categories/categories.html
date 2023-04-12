@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments :: page_head('Categories - Shopme Admin')" />
+<body>
+<div class="container-fluid">
+	
+	<div th:replace="navigation :: menu"></div>
+	
+	<div>
+		<h1>Manage Categories  </h1>
+		<a th:href="@{/categories/new}">Create Categories</a>	
+		&nbsp;|&nbsp;
+		<a th:href="@{/categories/export/csv}">Export to CSV</a>
+		&nbsp;|&nbsp;
+		<a th:href="@{/categories/export/excel}">Export to Excel</a>
+		&nbsp;|&nbsp;
+		<a th:href="@{/categories/export/pdf}">Export to PDF</a>
+		
+	</div>
+	
+	<div th:if="${message != null}" class="alert alert-success text-center" >
+		[[${message}]]
+	</div>
+	
+	<div>
+		<form th:action="@{/categories}" class="form-inline m-3">
+			Filter : &nbsp;
+			<input type="search" name="keyword" th:value="${keyword}" class="form-control" required/>
+			&nbsp;&nbsp;
+			<button type="submit" value="Search" class="btn btn-primary">
+				<i class="fa-solid fa-magnifying-glass"></i> 
+			</button>
+			&nbsp;&nbsp;
+			<button type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()">
+				<i class="fa-regular fa-circle-xmark"></i>
+			</button>
+		</form>
+	</div>
+	
+		<div class="full-details">
+			<table class="table table-bordered table-hover table-striped table-responsive-xL">
+				<thead class ="thead-dark">
+					<tr>
+						<th class="hideable-column">
+							<th th:replace="fragments :: column_link('id', 'ID', 'tag')" />
+						</th>
+						<th>
+							Category Image
+						</th>
+						
+						<th class="hideable-column">
+							<th th:replace="fragments :: column_link('name', 'Category Name', 'tag')" />
+						</th>					
+	
+						<th th:replace="fragments :: column_link('alias', 'Alias', 'none')" />
+						<th th:replace="fragments :: column_link('enabled', 'Enabled', 'none')" />						
+						<th>  </th>
+	
+					</tr>
+	
+				</thead>
+				<tbody>
+						<tr th:each="categories : ${listCategories}">
+							<td class="hideable-column">[[${categories.id}]]</td>
+							<td>
+									<span th:if="${categories.imagePath  == null}" class="fa-solid fa-image-portrait fa-3x icon-silver"></span>
+									<img th:if="${categories.imagePath  != null}" th:src="@{${categories.imagePath}}" style="width:100px" th:align="center"/>
+								<!--
+									<img th:src="@{${categories.imagePath}}" /> 
+								-->
+							</td>
+							<td>[[${categories.name}]]</td>
+							<td>[[${categories.alias}]]</td>							
+							<td>
+								<div th:replace="fragments :: categories_status" />
+							</td>
+							<td>
+								<div th:replace="fragments :: categories_actions" />
+							</td>
+						</tr>
+				</tbody>
+				
+			</table>
+	</div>
+
+	
+	<div th:replace="fragments :: footer"></div>
+</div>
+</body>
+
+<script>
+	function clearFilter(){
+		window.location="[[@{/categories}]]";
+	}
+</script>
+
+</html>

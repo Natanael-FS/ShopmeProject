@@ -1,6 +1,6 @@
 $(document).ready(function() {
 		$("#buttonCancel").on("click", function() {
-			window.location = "[[@{/}]]";
+			window.location = moduleURL;
 		});
 
 		$("#fileImage").change(function() {
@@ -26,3 +26,18 @@ $(document).ready(function() {
 
 		reader.readAsDataURL(file);
 	}
+	
+	function showModalDialog(title, message){
+		$("#modalTitle").text(title);
+		$("#modalBody").text(message);
+		$("#modalDialog").modal();
+	}
+	
+	function showWarningModal(message){
+		showModalDialog("Warning", message)
+	}
+	
+	function showErrorModal(message){
+		showModalDialog("Error", message)
+	}
+	

@@ -108,6 +108,7 @@
 
 </div>
 <script type="text/javascript">
+	moduleURL= "[[@{/}]]";
 	function checkPasswordMatch(confirmPassword) {
 		if (confirmPassword.value != $("#password").val()) {
 			confirmPassword.setCustomValidity("Passwords do not match!");
@@ -116,6 +117,6 @@
 		}
 	}
 </script>
-<script th:src="{/js/common_form.js}"></script>
+<script th:src="@{/js/common_form.js}"></script>
 </body>
 </html> 

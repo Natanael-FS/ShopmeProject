@@ -32,7 +32,7 @@ public class WebSecurtiyConfig extends WebSecurityConfigurerAdapter{
 	    	DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 	    	authenticationProvider.setUserDetailsService(userDetailsService());
 	    	authenticationProvider.setPasswordEncoder(passwordEncoder());
-	    	System.out.println("authprov :: "+authenticationProvider.toString());
+//	    	System.out.println("authprov :: "+authenticationProvider.toString());
 	    	
 	    	return authenticationProvider;
 	    }
@@ -46,6 +46,10 @@ public class WebSecurtiyConfig extends WebSecurityConfigurerAdapter{
 	    protected void configure(HttpSecurity http) throws Exception {  
 	        http.authorizeRequests()
 	        .antMatchers("/users/**").hasAuthority("Admin")
+	        .antMatchers("/categories/**","/brands/**","/menus/**").hasAnyAuthority("Admin", "Editor")
+			.antMatchers("/products/**").hasAnyAuthority("Admin", "Salesperson", "Editor", "Shipper")
+			.antMatchers("/customers/**","/shipping/**","/articles/**").hasAnyAuthority("Admin", "Salesperson")
+			.antMatchers("/orders/**","/report/**").hasAnyAuthority("Admin", "Salesperson", "Shipper")
 	        .anyRequest()
 	        .authenticated()
 	        .and().formLogin()
