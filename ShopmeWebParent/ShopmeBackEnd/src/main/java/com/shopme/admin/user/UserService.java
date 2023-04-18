@@ -41,15 +41,13 @@ public class UserService {
 		Sort sort = Sort.by(sortField);
 		
 		sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
-		
 		Pageable pageable = PageRequest.of(pageNum-1, USERS_PER_PAGE, sort);
 		
 		if (keyword!=null) {
-			return userRepository.findAll(keyword, pageable);
-		}
-	
+				return userRepository.findAll(keyword, pageable);
+			}
 		return userRepository.findAll(pageable);
-		}
+	}
 	
 	
 	public List<Role> listRoles() {

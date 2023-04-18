@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,38 +22,76 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.categories.export.CategoryCsvExporter;
+import com.shopme.admin.categories.export.CategoryExcelExporter;
+import com.shopme.admin.categories.export.CategoryPdfExporter;
 import com.shopme.admin.user.UserNotFoundException;
+import com.shopme.admin.user.controller.UserController;
+import com.shopme.admin.user.export.UserExcelExporter;
 import com.shopme.common.entity.Category;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
 
 @Controller
 public class CategoryController {
-	private static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
-	
+	private static final Logger log = LoggerFactory.getLogger(CategoryController.class);
+
 	@Autowired 
 	CategoriesService categoriesService;
 	
 	@GetMapping("/categories")
-	public String getCategory(Model model, @Param("keyword") String keyword) {
-		List<Category> listCategories = categoriesService.findRoot();
-		model.addAttribute("listCategories", listCategories);
-		model.addAttribute("keyword", keyword);		
-		
-		return"categories/categories";
+	public String getCategory(@Param("sortDir") String sortDir, Model model) {
+		return listByPage(1,"asc",model, null);
 	} 
+	
+	@GetMapping("/categories/page/{pageNum}")
+	public String listByPage(@PathVariable(name="pageNum") int pageNum, @Param("sortDir") String sortDir,
+			Model model, @Param("keyword") String keyword) {
+//		System.out.println(sortDir);
+//		if (sortDir ==  null || sortDir.isEmpty() || sortDir.equalsIgnoreCase(null) ) {
+//			System.out.println("truee");
+//			sortDir = "asc";
+//		}
+		System.out.println(sortDir);
+
+		String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
+
+		CategoryPageInfo pageInfo = new CategoryPageInfo();
+		List<Category> listCategories = categoriesService.listByPage(pageInfo, pageNum, sortDir, keyword);
+
+		long startCount = (pageNum - 1) * categoriesService.ROOT_CATEGORIES_PER_PAGE + 1;
+		long endCount = startCount + categoriesService.ROOT_CATEGORIES_PER_PAGE - 1;
+		if (endCount > pageInfo.getTotalElements()) {
+			endCount = pageInfo.getTotalElements();
+		}
+		
+		model.addAttribute("totalPages", pageInfo.getTotalPages());
+		model.addAttribute("totalItems", pageInfo.getTotalElements());
+		model.addAttribute("currentPage", pageNum);
+		model.addAttribute("sortField", "name");
+		model.addAttribute("sortDir", sortDir);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("startCount", startCount);
+		model.addAttribute("endCount", endCount);
+
+		model.addAttribute("listCategories", listCategories);
+		model.addAttribute("reverseSortDir", reverseSortDir);
+
+		log.info("CategoryController | listAll | listCategories  " );
+		log.info("CategoryController | listAll | reverseSortDir : " + reverseSortDir);
+		
+		return "categories/categories";
+	}
 	
 	@GetMapping("/categories/new")
 	public String newCategory(Model model, @Param("keyword") String keyword) {
 		List<Category> listCategories = categoriesService.listCategoriesUsedInForm();
 		Category category = new Category();
 		category.setEnabled(true);
-		System.out.println(listCategories.toString());
 		
 		for (Category category2 : listCategories) {
 			System.out.println(category2.getName());
 		}
-		
 		model.addAttribute("category",category);
 		model.addAttribute("listCategories",listCategories);
 		model.addAttribute("keyword", keyword);		
@@ -110,6 +150,53 @@ public class CategoryController {
 
 		return"categories/categories_form";
 	}
+
+	@GetMapping("/categories/delete/{id}")
+	public String deleteUser(@PathVariable(name = "id") Integer id,
+		 Model model, RedirectAttributes redirectAttributes)
+	{
+		try {
+			 categoriesService.deleteCategory(id);
+
+				redirectAttributes.addFlashAttribute("message", "The User ID " +id + "has been deleted successfully");
+
+		} catch (CategoryNotFoundException ex) {
+			redirectAttributes.addFlashAttribute("message",ex.getMessage());
+		}
+		
+		return "redirect:/categories";
+	}
 	
+	@GetMapping("/categories/export/excel")
+	public void exportToExcel(HttpServletResponse response) throws IOException {
+		List<Category> listCategories = categoriesService.listAll();
+		
+		CategoryExcelExporter exporter = new CategoryExcelExporter();
+		log.info("CategoryController | exportToExcel | export is starting");
+		exporter.export(listCategories, response);
+		log.info("CategoryController | exportToExcel | export completed");		
+	}	
+	
+	@GetMapping("/categories/export/csv")
+	public void exportTocsv(HttpServletResponse response) throws IOException {
+		List<Category> listCategories = categoriesService.listAll();
+		
+		CategoryCsvExporter exporter = new CategoryCsvExporter();
+		log.info("CategoryController | exportToCsv | export is starting");
+		exporter.export(listCategories, response);
+		log.info("CategoryController | exportToCsv | export completed");		
+	}	
+	
+	@GetMapping("/categories/export/pdf")
+	public void exportTopdf(HttpServletResponse response) throws IOException {
+		List<Category> listCategories = categoriesService.listAll();
+		
+		CategoryPdfExporter exporter = new CategoryPdfExporter();
+		log.info("CategoryController | exportToPdf | export is starting");
+		exporter.export(listCategories, response);
+		log.info("CategoryController | exportToPdf | export completed");		
+	}	
+
+
 }
 

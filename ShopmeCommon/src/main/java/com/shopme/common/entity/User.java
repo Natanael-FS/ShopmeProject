@@ -71,6 +71,11 @@ public class User {
 		return "/user-photos/"+this.id+"/"+this.photos;
 	}
 	
+	@Transient
+	public String getFullName() {
+		return firstName + " " + lastName;
+	}
+	
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName

@@ -43,6 +43,16 @@ public class Category {
 	@OneToMany( mappedBy = "parent")
 	private Set<Category> children = new HashSet<>();
 	
+	@Transient
+	public String getImagePath() {
+		if(id == null)
+			return "/images/image-thumbnail.png";
+//		System.out.println("/category-images/"+this.id+"/"+this.image);
+		return "/category-images/"+this.id+"/"+this.image;
+	}
+	
+	@Transient
+	private boolean hasChildren;
 	
 	public Integer getId() {
 		return id;
@@ -99,15 +109,15 @@ public class Category {
 	public void setChildren(Set<Category> childrenCategories) {
 		this.children= childrenCategories;
 	}
-
-	@Transient
-	public String getImagePath() {
-		if(id == null)
-			return "/images/image-thumbnail.png";
-//		System.out.println("/category-images/"+this.id+"/"+this.image);
-		return "/category-images/"+this.id+"/"+this.image;
-	}
 	
+	public boolean isHasChildren() {
+		return hasChildren;
+	}
+
+	public void setHasChildren(boolean hasChildren) {
+		this.hasChildren = hasChildren;
+	}
+
 	public Category() {
 	}
 	
@@ -137,7 +147,8 @@ public class Category {
 		copycategory.setAlias(category.getAlias());
 		copycategory.setImage(category.getImage());
 		copycategory.setEnabled(category.getEnabled());
-		
+		copycategory.setHasChildren(category.getChildren().size() > 0);
+
 		return copycategory;
 	}
 	
@@ -177,11 +188,11 @@ public class Category {
 //		this.children = children;
 //	}
 
-	@Override
-	public String toString() {
-		return "Category [id=" + id + ", name=" + name + ", alias=" + alias + ", image=" + image + ", enabled="
-				+ enabled + ", parent=" + parent + ", children=" + children + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "Category [id=" + id + ", name=" + name + ", alias=" + alias + ", image=" + image + ", enabled="
+//				+ enabled + ", parent=" + parent + ", children=" + children + "]";
+//	}
 
 	
 }

@@ -22,40 +22,27 @@
 		[[${message}]]
 	</div>
 	
-	<div>
-		<form th:action="@{/categories}" class="form-inline m-3">
-			Filter : &nbsp;
-			<input type="search" name="keyword" th:value="${keyword}" class="form-control" required/>
-			&nbsp;&nbsp;
-			<button type="submit" value="Search" class="btn btn-primary">
-				<i class="fa-solid fa-magnifying-glass"></i> 
-			</button>
-			&nbsp;&nbsp;
-			<button type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()">
-				<i class="fa-regular fa-circle-xmark"></i>
-			</button>
-		</form>
-	</div>
+		<div th:replace="fragments :: search_form('/categories/page/1')" >	</div>
 	
 		<div class="full-details">
 			<table class="table table-bordered table-hover table-striped table-responsive-xL">
 				<thead class ="thead-dark">
 					<tr>
-						<th class="hideable-column">
-							<th th:replace="fragments :: column_link('id', 'ID', 'tag')" />
+						<th>
+							ID	
 						</th>
 						<th>
 							Category Image
 						</th>
-						
-						<th class="hideable-column">
-							<th th:replace="fragments :: column_link('name', 'Category Name', 'tag')" />
-						</th>					
-	
-						<th th:replace="fragments :: column_link('alias', 'Alias', 'none')" />
-						<th th:replace="fragments :: column_link('enabled', 'Enabled', 'none')" />						
+							<th>
+								 <a class="text-white" th:href="@{'/categories/page/'+ ${currentPage} + '?sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' +keyword  : ''}}">Category Name</a>
+								<span th:class="${reverseSortDir == 'desc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}" ></span>	
+							</th>
+						<!-- <th th:replace="fragments :: column_link('/categories', 'name', 'Categories Name', 'none')" />	 -->
+													
+						<th class="hideable-column"> Alias </th>
+						<th> Enabled </th>						
 						<th>  </th>
-	
 					</tr>
 	
 				</thead>
@@ -72,18 +59,43 @@
 							<td>[[${categories.name}]]</td>
 							<td>[[${categories.alias}]]</td>							
 							<td>
-								<div th:replace="fragments :: categories_status" />
+								<div th:replace="fragments :: status(${categories.enabled}, 'category', '/categories/' + ${categories.id})" />
+
 							</td>
 							<td>
-								<div th:replace="fragments :: categories_actions" />
+								<div th:replace="fragments :: edit('category', '/categories/edit/' + ${categories.id})" />
+								<div th:replace="fragments :: delete('category', '/categories/delete/' + ${categories.id}, ${categories.hasChildren})" />
 							</td>
 						</tr>
 				</tbody>
 				
 			</table>
 	</div>
-
 	
+	<div class="less-details">
+		<div th:each="categories : ${listCategories}" class="row m-1">
+			<div class="col-4"> 
+				<img th:src="@{${categories.imagePath}}" style="width:100px" class="img-fluid" />
+			 </div>
+			 <div class="col-8">
+			 	<div>[[${categories.name}]]</div>
+			 	<div class="mt-2">
+			 		<div th:replace="fragments :: categories_status" />
+					&nbsp;
+					<div th:replace="fragments :: categories_actions" />
+			 	</div>
+			 </div>
+		</div>
+	</div>
+<!--
+	<div th:if="${keyword != null}">
+		<span>Search result does not show categories in heirearchical form</span>
+			<div th:replace="fragments :: pagination('/categories', 'categories')"></div>
+	</div>
+ -->
+	
+	<div th:replace="fragments :: pagination('/categories', 'top-level categories')"></div>
+
 	<div th:replace="fragments :: footer"></div>
 </div>
 </body>
