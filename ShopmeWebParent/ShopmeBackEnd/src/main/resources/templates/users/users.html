@@ -35,11 +35,7 @@
 		
 	</div>
 	
-	<div th:if="${message != null}" class="alert alert-success text-center" >
-		[[${message}]]
-	</div>
-	
-	<div th:replace="fragments :: search_form('/users/page/1')" >	</div>
+	<div th:replace="fragments :: search_form_and_message('/users/page/1')" >	</div>
 	
 	<div class="full-details">
 			<table class="table table-bordered table-hover table-striped table-responsive-xL">
@@ -87,7 +83,7 @@
 						
 						<td>
 							<div th:replace="fragments :: edit('user', '/users/edit/' + ${user.id})" />
-							<div th:replace="fragments :: delete('user', '/users/delete/' + ${user.id}, true)" />
+							<div th:replace="fragments :: delete('user', ${user.id}, '/users/delete/' + ${user.id}, true)" />
 						</td>
 					</tr>
 				</tbody>
@@ -104,9 +100,11 @@
 				<div>[[${user.fullName}]]</div>
 				<div>[[${user.roles}]]</div>
 				<div class="mt-2">
-					<div th:replace="fragments :: user_status" />
+					<div th:replace="fragments :: status(${user.enabled}, 'user', '/users/' + ${user.id})" />
 					&nbsp; 			
-					<div th:replace="fragments :: user_actions" />
+					<div th:replace="fragments :: edit('user', '/users/edit/' + ${user.id})" />
+					&nbsp; 			
+					<div th:replace="fragments :: delete('user', ${user.id}, '/users/delete/' + ${user.id}, true)" />				
 				</div>
 			</div>
 			<div>&nbsp;</div>

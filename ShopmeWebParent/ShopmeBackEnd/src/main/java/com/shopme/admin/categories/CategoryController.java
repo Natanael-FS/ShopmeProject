@@ -52,7 +52,7 @@ public class CategoryController {
 //			System.out.println("truee");
 //			sortDir = "asc";
 //		}
-		System.out.println(sortDir);
+//		System.out.println(sortDir);
 
 		String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
 

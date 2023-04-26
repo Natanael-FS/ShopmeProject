@@ -116,15 +116,14 @@
 				title="'Edit this ' + ${entityName} "></a>	
 		</div>
 		
-		<div th:fragment="delete(entityName, deleteURL, visible)" th:remove="tag">
-		&nbsp;
-		<th:block th:if="${visible}">
-			<a class="fas fa-trash fa-2x icon-red link-delete" 
-				th:href="@{${deleteURL}}"
-				th:entityId="${entityName.id}"
-				title="'Delete this ' + ${entityName} "></a>	
-		</th:block>
-			
+		<div th:fragment="delete(entityName, entityId, deleteURL, visible)" th:remove="tag">
+			&nbsp;
+			<th:block th:if="${visible}">
+				<a class="fas fa-trash fa-2x icon-red link-delete" 
+					th:href="@{${deleteURL}}"
+					th:entityId="${entityId}"
+					title="'Delete this ' + ${entityName} "></a>	
+			</th:block>
 		</div>
 	<!-- REFACTOR END -->
 
@@ -165,8 +164,8 @@
 	</div>
 	<!-- PAGINATION END-->
 
-	<!-- SEARCH FORM -->
-	<div th:fragment="search_form(moduleURL)">
+	<!-- SEARCH FORM AND MESSAGE -->
+	<div th:fragment="search_form_and_message(moduleURL)">
 		<form th:action="@{${moduleURL}}" class="form-inline m-3">
 			<input type="hidden" name="sortField" th:value="${sortField}" />
 			<input type="hidden" name="sortDir" th:value="${sortDir}" />
@@ -182,6 +181,12 @@
 				<i class="fas fa-eraser"></i>
 			</button>
 		</form>
+		
+		<div th:if="${message != null}" class="alert alert-success text-center" >
+			[[${message}]]
+		</div>
+	
+		
 	</div>	
 	<!-- SEARCH FORM END-->
 	

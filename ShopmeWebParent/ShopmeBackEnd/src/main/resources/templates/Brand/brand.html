@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments :: page_head('Brand - Shopme Admin')" />
+<body>
+<div class="container-fluid">
+	
+	<div th:replace="navigation :: menu"></div>
+	
+	<div>
+		<h1> Manage Brand  </h1>
+		<a th:href="@{/brands/new}">Create Brand</a>	
+		&nbsp;|&nbsp;
+		<a th:href="@{/brands/export/csv}">Export to CSV</a>
+		&nbsp;|&nbsp;
+		<a th:href="@{/brands/export/excel}">Export to Excel</a>
+		&nbsp;|&nbsp;
+		<a th:href="@{/brands/export/pdf}">Export to PDF</a>
+		
+	</div>
+	
+	<div th:replace="fragments :: search_form_and_message('/brand/page/1')">	</div>
+	
+	<div class="full-details">
+		<table class="table table-bordered table-hover table-striped table-responsive-xL">
+			<thead class ="thead-dark">
+				<tr>
+					<th>
+						Brand ID	
+					</th>
+					<th>
+						Logo
+					</th>
+					<th>
+						Brand Name
+					</th>
+					<!-- 
+					<th>
+						 <a class="text-white" th:href="@{'/brand/page/'+ ${currentPage} + '?sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' +keyword  : ''}}">Brand Name</a>
+						<span th:class="${reverseSortDir == 'desc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}" ></span>	
+					</th>						
+					-->
+					<!-- <th th:replace="fragments :: column_link('/brand', 'name', 'Brand Name', 'none')" />	 -->
+					<th> Categories </th>						
+					<th>  </th>
+				</tr>
+
+			</thead>
+			<tbody>
+					<tr th:each="brand : ${listBrands}">
+						<td class="hideable-column">[[${brand.id}]]</td>
+						<td>
+							<!--
+								<span th:if="${brand.imagePath  == null}" class="fa-solid fa-image-portrait fa-3x icon-silver"></span>
+								<img th:if="${brand.imagePath  != null}" th:src="@{${brand.imagePath}}" style="width:100px" th:align="center"/>
+								
+								<img th:src="@{${brand.imagePath}}" /> 
+							-->
+						</td>
+						<td>[[${brand.name}]]</td>
+						<td>
+							<th:block th:each="cat : ${brand.categories}">
+								<span class="badge badge-secondary" th:text="${cat.name}"> </span>
+							</th:block>
+						</td>							
+						<td>
+							<div th:replace="fragments :: edit('brand', '/brands/edit/' + ${brand.id})" />
+							<div th:replace="fragments :: delete('brand', ${brand.id},'/brands/delete/' + ${brand.id}, true)" />
+						</td>
+					</tr>
+			</tbody>
+			
+		</table>
+	</div>
+	
+	<div class="less-details">
+		<div th:each="brand : ${listBrand}" class="row m-1">
+			<div class="col-4"> 
+				<img th:src="@{${brand.imagePath}}" style="width:100px" class="img-fluid" />
+			 </div>
+			 <div class="col-8">
+			 	<div>[[${brand.name}]]</div>
+			 	<div class="mt-2">
+					<div th:replace="fragments :: status(${brand.enabled}, 'brand', '/brand/' + ${brand.id})" />
+					&nbsp;
+					<div th:replace="fragments :: edit('brand', '/brands/edit/' + ${brand.id})" />
+					&nbsp;
+					<div th:replace="fragments :: delete('brand', ${brand.id}, '/brands/delete/' + ${brand.id}, true)" />
+			 	</div>
+			 </div>
+		</div>
+	</div>	
+<!--
+	<div th:if="${keyword != null}">
+		<span>Search result does not show brand in heirearchical form</span>
+			<div th:replace="fragments :: pagination('/brand', 'brand')"></div>
+	</div>
+ -->	<div th:replace="modal_fragments :: confirm_modal"></div>
+
+	
+	<div th:replace="fragments :: pagination('/brand', 'top-level brand')"></div>
+
+	<div th:replace="fragments :: footer"></div>
+</div>
+
+<script th:src="@{/js/common_list.js}"></script>
+<script type="text/javascript">
+	moduleURL = "[[@{/brands}]]";
+
+	$(document).ready(function() {
+		$(".link-delete").on("click", function(e) {
+			e.preventDefault();
+			showDeleteConfirmModal($(this), 'brand');
+		});
+	});
+
+	function clearFilter(){
+		window.location="[[@{/brand}]]";
+	}
+</script>
+
+</body>
+</html>

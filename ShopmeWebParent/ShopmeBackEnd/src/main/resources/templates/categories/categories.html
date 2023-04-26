@@ -18,58 +18,54 @@
 		
 	</div>
 	
-	<div th:if="${message != null}" class="alert alert-success text-center" >
-		[[${message}]]
-	</div>
+	<div th:replace="fragments :: search_form_and_message('/categories/page/1')" >	</div>
 	
-		<div th:replace="fragments :: search_form('/categories/page/1')" >	</div>
-	
-		<div class="full-details">
-			<table class="table table-bordered table-hover table-striped table-responsive-xL">
-				<thead class ="thead-dark">
-					<tr>
+	<div class="full-details">
+		<table class="table table-bordered table-hover table-striped table-responsive-xL">
+			<thead class ="thead-dark">
+				<tr>
+					<th>
+						ID	
+					</th>
+					<th>
+						Category Image
+					</th>
 						<th>
-							ID	
+							 <a class="text-white" th:href="@{'/categories/page/'+ ${currentPage} + '?sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' +keyword  : ''}}">Category Name</a>
+							<span th:class="${reverseSortDir == 'desc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}" ></span>	
 						</th>
-						<th>
-							Category Image
-						</th>
-							<th>
-								 <a class="text-white" th:href="@{'/categories/page/'+ ${currentPage} + '?sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' +keyword  : ''}}">Category Name</a>
-								<span th:class="${reverseSortDir == 'desc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}" ></span>	
-							</th>
-						<!-- <th th:replace="fragments :: column_link('/categories', 'name', 'Categories Name', 'none')" />	 -->
-													
-						<th class="hideable-column"> Alias </th>
-						<th> Enabled </th>						
-						<th>  </th>
-					</tr>
-	
-				</thead>
-				<tbody>
-						<tr th:each="categories : ${listCategories}">
-							<td class="hideable-column">[[${categories.id}]]</td>
-							<td>
-									<span th:if="${categories.imagePath  == null}" class="fa-solid fa-image-portrait fa-3x icon-silver"></span>
-									<img th:if="${categories.imagePath  != null}" th:src="@{${categories.imagePath}}" style="width:100px" th:align="center"/>
-								<!--
-									<img th:src="@{${categories.imagePath}}" /> 
-								-->
-							</td>
-							<td>[[${categories.name}]]</td>
-							<td>[[${categories.alias}]]</td>							
-							<td>
-								<div th:replace="fragments :: status(${categories.enabled}, 'category', '/categories/' + ${categories.id})" />
+					<!-- <th th:replace="fragments :: column_link('/categories', 'name', 'Categories Name', 'none')" />	 -->
+												
+					<th class="hideable-column"> Alias </th>
+					<th> Enabled </th>						
+					<th>  </th>
+				</tr>
 
-							</td>
-							<td>
-								<div th:replace="fragments :: edit('category', '/categories/edit/' + ${categories.id})" />
-								<div th:replace="fragments :: delete('category', '/categories/delete/' + ${categories.id}, ${categories.hasChildren})" />
-							</td>
-						</tr>
-				</tbody>
-				
-			</table>
+			</thead>
+			<tbody>
+					<tr th:each="categories : ${listCategories}">
+						<td class="hideable-column">[[${categories.id}]]</td>
+						<td>
+								<span th:if="${categories.imagePath  == null}" class="fa-solid fa-image-portrait fa-3x icon-silver"></span>
+								<img th:if="${categories.imagePath  != null}" th:src="@{${categories.imagePath}}" style="width:100px" th:align="center"/>
+							<!--
+								<img th:src="@{${categories.imagePath}}" /> 
+							-->
+						</td>
+						<td>[[${categories.name}]]</td>
+						<td>[[${categories.alias}]]</td>							
+						<td>
+							<div th:replace="fragments :: status(${categories.enabled}, 'category', '/categories/' + ${categories.id})" />
+
+						</td>
+						<td>
+							<div th:replace="fragments :: edit('category', '/categories/edit/' + ${categories.id})" />
+							<div th:replace="fragments :: delete('category', ${categories.id},'/categories/delete/' + ${categories.id}, ${!categories.hasChildren})" />
+						</td>
+					</tr>
+			</tbody>
+			
+		</table>
 	</div>
 	
 	<div class="less-details">
@@ -80,9 +76,11 @@
 			 <div class="col-8">
 			 	<div>[[${categories.name}]]</div>
 			 	<div class="mt-2">
-			 		<div th:replace="fragments :: categories_status" />
+					<div th:replace="fragments :: status(${categories.enabled}, 'category', '/categories/' + ${categories.id})" />
 					&nbsp;
-					<div th:replace="fragments :: categories_actions" />
+					<div th:replace="fragments :: edit('category', '/categories/edit/' + ${categories.id})" />
+					&nbsp;
+					<div th:replace="fragments :: delete('category', ${categories.id}, '/categories/delete/' + ${categories.id}, ${!categories.hasChildren})" />
 			 	</div>
 			 </div>
 		</div>
