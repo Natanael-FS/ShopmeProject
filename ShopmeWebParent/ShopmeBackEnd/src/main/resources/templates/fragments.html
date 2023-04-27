@@ -125,6 +125,16 @@
 					title="'Delete this ' + ${entityName} "></a>	
 			</th:block>
 		</div>
+
+		<div th:fragment="delete2(entityName, entityId, deleteURL, visible)" th:remove="tag">
+			<th:block th:if="${visible}">
+			<a class="fas fa-trash fa-2x icon-dark link-delete" 
+			th:href="@{${deleteURL}}"
+				th:entityId="${entityId}"
+				th:title="'Delete this ' + ${entityName}"></a>
+			</th:block>	
+		</div>
+		
 	<!-- REFACTOR END -->
 
 	<!-- PAGINATION -->

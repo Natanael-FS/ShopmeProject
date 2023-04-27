@@ -3,7 +3,8 @@ package com.shopme.admin.brand;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.poi.util.StringUtil;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shopme.admin.FileUploadUtil;
 import com.shopme.admin.categories.CategoriesService;
+import com.shopme.admin.brand.export.BrandCsvExporter;
+import com.shopme.admin.brand.export.BrandExcelExporter;
+import com.shopme.admin.brand.export.BrandPdfExporter;
 import com.shopme.common.entity.Brand;
 import com.shopme.common.entity.Category;
-import com.shopme.common.entity.Role;
-import com.shopme.common.entity.User;
 import com.shopme.common.entity.Brand;
 
 @Controller
@@ -40,16 +42,16 @@ public class BrandController {
 	
 	@GetMapping("/brands")
 	public String getBrand(@Param("sortDir") String sortDir, Model model) {
-		return listByPage(1,"asc",model, null);
+		return listByPage(1,"asc","name",model, null);
 	} 
 	
 	@GetMapping("/brands/page/{pageNum}")
-	public String listByPage(@PathVariable(name="pageNum") int pageNum, @Param("sortDir") String sortDir,
+	public String listByPage(@PathVariable(name="pageNum") int pageNum, @Param("sortDir") String sortDir, @Param("sortField") String sortField,
 			Model model, @Param("keyword") String keyword) {
 
 		System.out.println("SortDir :"+sortDir);
 		
-		Page<Brand> page = service.listByPage(pageNum,"name",sortDir,keyword);
+		Page<Brand> page = service.listByPage(pageNum,sortField,sortDir,keyword);
 		List<Brand> listBrands =  page.getContent();
 		
 		String reverseSortDirString = sortDir.equals("asc") ? "desc" : "asc";
@@ -68,7 +70,7 @@ public class BrandController {
 		model.addAttribute("endCount", endCount);
 		model.addAttribute("totalItems", page.getTotalElements());
 		model.addAttribute("listBrands", listBrands);
-//		model.addAttribute("sortField", sortField);
+		model.addAttribute("sortField", sortField);
 		model.addAttribute("sortDir", sortDir);
 		model.addAttribute("reverseSortDirString", reverseSortDirString);
 		model.addAttribute("keyword", keyword);
@@ -94,14 +96,13 @@ public class BrandController {
 			brand.setLogo(filename);
 			
 			Brand savedBrand = service.save(brand);
-			String uploadDirString = "../brand/logos"+ savedBrand.getId();
-			
+			String uploadDirString = "../brand-logos/"+ savedBrand.getId();
 			FileUploadUtil.cleanDir(uploadDirString);
 			FileUploadUtil.saveFile(uploadDirString, filename, multipartFile);
 		}else {
 			service.save(brand);
 		}
-		
+		ra.addFlashAttribute("message", "The Brand has been saved successfully");
 		return "redirect:/brands";
 	}
 	
@@ -124,19 +125,51 @@ public class BrandController {
 	
 	
 	@GetMapping("/brands/delete/{id}")
-	public String editBrandById(@PathVariable(name = "id")Integer id, 
+	public String deleteBrand(@PathVariable(name = "id")Integer id,
 			Model model, RedirectAttributes redirectAttributes) {
 		try {
-			Brand brand = service.get(id);
-			List<Category> listCategories = categoriesService.listCategoriesUsedInForm();
+			 service.delete(id);
 
-			model.addAttribute("listCategories", listCategories);
-			model.addAttribute("brand", brand);
-			model.addAttribute("pageTitle", "Edit Brand (ID : " + id + ")");
-			return "brand/brand_form";
+			redirectAttributes.addFlashAttribute("message", "The Brand ID " +id + " has been deleted successfully");
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("message", e.getMessage());
-			return "redirect:/brands";
 		}
+		return "redirect:/brands";
 	}
+	
+	/*
+	 @GetMapping("/brands/export/csv")
+	public void exportToCSV(HttpServletResponse response) throws IOException {
+		List<Brand> listbrands = service.listAll();
+		
+		BrandCsvExporter exporter = new BrandCsvExporter();
+		log.info("BrandController | exportToCSV | export is starting");
+		exporter.export(listbrands, response);
+		log.info("BrandController | exportToCSV | export completed");		
+	}
+	
+	
+	@GetMapping("/brands/export/excel")
+	public void exportToExcel(HttpServletResponse response) throws IOException {
+		List<Brand> listbrands = service.listAll();
+		
+		BrandExcelExporter exporter = new BrandExcelExporter();
+		log.info("BrandController | exportToExcel | export is starting");
+		exporter.export(listbrands, response);
+		log.info("BrandController | exportToExcel | export completed");		
+	}		
+
+	
+	@GetMapping("/brands/export/pdf")
+	public void exportToPdf(HttpServletResponse response) throws IOException {
+		List<Brand> listbrands = brandService.listAll();
+		
+		BrandPdfExporter exporter = new BrandPdfExporter();
+		log.info("BrandController | exportToPdf | export is starting");
+		exporter.export(listbrands, response);
+		log.info("BrandController | exportToPdf | export completed");		
+	}
+	
+	 */
+	
 }

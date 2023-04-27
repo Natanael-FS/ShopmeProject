@@ -9,7 +9,9 @@ import com.shopme.common.entity.Brand;
 import com.shopme.common.entity.User;
 
 public interface BrandRepository extends PagingAndSortingRepository<Brand, Integer>{
-	
+	public Long countById(Integer id);
+	public Brand findByName(String name);
+
 	@Query("SELECT u FROM Brand u WHERE CONCAT(u.id, ' ', u.name, ' ') LIKE %?1%")
 	public Page<Brand> findAll(String keyword, Pageable pageable);
 }

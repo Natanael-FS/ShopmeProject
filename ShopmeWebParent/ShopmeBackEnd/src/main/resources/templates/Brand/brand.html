@@ -18,20 +18,21 @@
 		
 	</div>
 	
-	<div th:replace="fragments :: search_form_and_message('/brand/page/1')">	</div>
+	<div th:replace="fragments :: search_form_and_message('/brands/page/1')">	</div>
 	
 	<div class="full-details">
 		<table class="table table-bordered table-hover table-striped table-responsive-xL">
 			<thead class ="thead-dark">
 				<tr>
-					<th>
+					<th class="hideable-column">
 						Brand ID	
 					</th>
 					<th>
 						Logo
 					</th>
 					<th>
-						Brand Name
+						<th th:replace="fragments :: column_link('/brands','name', 'Brand Name', 'tag')" />
+
 					</th>
 					<!-- 
 					<th>
@@ -49,11 +50,10 @@
 					<tr th:each="brand : ${listBrands}">
 						<td class="hideable-column">[[${brand.id}]]</td>
 						<td>
+							<img th:src="@{${brand.logoPath}}" style="width:100px" class="img-fluid"/> 
 							<!--
 								<span th:if="${brand.imagePath  == null}" class="fa-solid fa-image-portrait fa-3x icon-silver"></span>
 								<img th:if="${brand.imagePath  != null}" th:src="@{${brand.imagePath}}" style="width:100px" th:align="center"/>
-								
-								<img th:src="@{${brand.imagePath}}" /> 
 							-->
 						</td>
 						<td>[[${brand.name}]]</td>
@@ -64,7 +64,13 @@
 						</td>							
 						<td>
 							<div th:replace="fragments :: edit('brand', '/brands/edit/' + ${brand.id})" />
+								&nbsp;
 							<div th:replace="fragments :: delete('brand', ${brand.id},'/brands/delete/' + ${brand.id}, true)" />
+
+							<!-- 
+								<div th:replace="fragments :: delete2('brand', ${brand.id}, '/brands/delete/' + ${brand.id}, true)" />
+								<div th:replace="fragments :: delete('brand', ${brand.id}, '/brands/delete/' + ${brand.id}, true)" />												
+							 -->
 						</td>
 					</tr>
 			</tbody>
@@ -72,22 +78,22 @@
 		</table>
 	</div>
 	
+
 	<div class="less-details">
-		<div th:each="brand : ${listBrand}" class="row m-1">
-			<div class="col-4"> 
-				<img th:src="@{${brand.imagePath}}" style="width:100px" class="img-fluid" />
-			 </div>
-			 <div class="col-8">
-			 	<div>[[${brand.name}]]</div>
-			 	<div class="mt-2">
-					<div th:replace="fragments :: status(${brand.enabled}, 'brand', '/brand/' + ${brand.id})" />
-					&nbsp;
+		<div th:each="brand : ${listBrands}" class="row m-1">
+			<div class="col-6">
+				<img th:src="@{${brand.logoPath}}" style="width: 100px" class="img-fluid"/>			
+			</div>
+			<div class="col-6">
+				<div><b>[[${brand.name}]]</b></div>
+				<div class="mt-2">
 					<div th:replace="fragments :: edit('brand', '/brands/edit/' + ${brand.id})" />
-					&nbsp;
+					&nbsp; 
 					<div th:replace="fragments :: delete('brand', ${brand.id}, '/brands/delete/' + ${brand.id}, true)" />
-			 	</div>
-			 </div>
-		</div>
+				</div>
+			</div>
+			<div>&nbsp;</div>
+		</div>	
 	</div>	
 <!--
 	<div th:if="${keyword != null}">
@@ -97,7 +103,7 @@
  -->	<div th:replace="modal_fragments :: confirm_modal"></div>
 
 	
-	<div th:replace="fragments :: pagination('/brand', 'top-level brand')"></div>
+	<div th:replace="fragments :: pagination('/brands', 'brand')"></div>
 
 	<div th:replace="fragments :: footer"></div>
 </div>
@@ -107,14 +113,19 @@
 	moduleURL = "[[@{/brands}]]";
 
 	$(document).ready(function() {
-		$(".link-delete").on("click", function(e) {
-			e.preventDefault();
-			showDeleteConfirmModal($(this), 'brand');
+		$(".link-delete").on("click", function(e){
+			e.preventDefault();	
+			link = $(this);
+			//alert($(this).attr("href"));
+			
+			brandId = link.attr("brandId");
+			$("#yesButton").attr("href", link.attr("href"));
+			$("#confirmText").text("Are you sure you want to delete this Brand ID ?");
+			$("#confirmModal").modal();
 		});
 	});
-
 	function clearFilter(){
-		window.location="[[@{/brand}]]";
+		window.location="[[@{/brands}]]";
 	}
 </script>
 
