@@ -131,7 +131,7 @@ public class CategoryController {
 		categoriesService.updateCategoryEnabledStatus(id, enabled);
 		
 		String status = enabled ? "enabled" : "disabled";
-		String message = "The Categories id " + id + "has been " + status;
+		String message = "The Categories id " + id + " has been " + status;
 		redirectAttributes.addFlashAttribute("message", message);
 		
 		return "redirect:/categories";

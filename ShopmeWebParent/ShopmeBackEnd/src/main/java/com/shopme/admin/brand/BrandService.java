@@ -1,6 +1,7 @@
 package com.shopme.admin.brand;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,7 @@ public class BrandService {
 	BrandRepository repository;
 
 	public List<Brand> listAll() {
-	 return (List<Brand>)repository.findAll(Sort.by("firstName").ascending());	
+	 return (List<Brand>)repository.findAll(Sort.by("name").ascending());	
 	}
 	
 	public Page<Brand> listByPage(int pageNum, String sortField, String sortDir, String keyword){
@@ -40,16 +41,19 @@ public class BrandService {
 		return repository.save(brand);		
 	}
 	
-	public Brand get(Integer id) {
-		return repository.findById(id).get();
-		
+	public Brand get(Integer id) throws BrandNotFoundException {
+		try {
+			return repository.findById(id).get();
+		} catch (NoSuchElementException ex) {
+			throw new BrandNotFoundException("Could not find any brand with ID " + id);
+		}
 	}
 	
-	public void delete(Integer id) throws BrandNotFoundExecption{
+	public void delete(Integer id) throws BrandNotFoundException{
 		Long countById = repository.countById(id);
 
 		if (countById == null || countById == 0) {
-			throw new BrandNotFoundExecption("Could not find any brand with ID " + id);			
+			throw new BrandNotFoundException("Could not find any brand with ID " + id);			
 		}
 
 		repository.deleteById(id);

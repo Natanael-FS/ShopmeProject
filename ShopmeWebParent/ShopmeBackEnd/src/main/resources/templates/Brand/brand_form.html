@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head th:replace="fragments :: page_head(${pageTitle})" />
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')" />
 <body>
 <div class="container-fluid">
 	
@@ -15,7 +15,7 @@
 	</div>
 	
 	<form th:action="@{/brands/save}" method="post" style="max-width: 550px; margin: 0 auto"
-	enctype="multipart/form-data" onsubmit="checkUnique(this)"
+	enctype="multipart/form-data" onsubmit="return checkUnique(this)"
 	th:object="${brand}">
 		<input type="hidden" th:field="*{id}"/>
 	
@@ -75,7 +75,7 @@
 </div>
 <script th:src="@{/js/common_form.js}"></script>
 <script type="text/javascript">
-	
+	MAX_FILE_SIZE = 102400; // 100KB
 	moduleURL= "[[@{/brands}]]";
 	
 	function showModalDialog(title, message){

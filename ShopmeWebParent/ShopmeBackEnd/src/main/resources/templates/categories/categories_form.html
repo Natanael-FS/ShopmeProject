@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head th:replace="fragments :: page_head(${pageTitle})" />
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')" />
 <body>
 <div class="container-fluid">
 	
@@ -91,6 +91,7 @@
 	}
 	
 	function checkUnique(form){
+	MAX_FILE_SIZE = 102400; // 100KB
 		catId = $('#id').val();
 		catName = $('#name').val();
 		catAlias = $('#alias').val();

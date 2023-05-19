@@ -42,9 +42,7 @@ public class FileUploadUtil {
 						Files.delete(file);
 					} catch (IOException e) {
 						LOGGER.error("Could not delete file "+file);
-//						System.out.println("Could not delete file "+file);
-					}
-					
+					}				
 				}
 			});
 		
@@ -54,4 +52,15 @@ public class FileUploadUtil {
 		}
 	}
 	
+	public static void removeDir(String dir) {		
+		cleanDir(dir);
+		LOGGER.info("FileUploadUtil | cleanDir(dir) is over");
+		try {
+			Files.delete(Paths.get(dir));
+		} catch (IOException e) {
+			LOGGER.error("Could not remove directory: " + dir);
+		}
+
+	}
+
 }

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head th:replace="fragments :: page_head(${pageTitle}, 'tag')" />
+	<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}"/>
+	<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+<body>
+<div class="container-fluid">
+	
+	<div th:replace="navigation :: menu"></div>
+			
+	<div>
+		<h2>Manage Products | [[${pageTitle}]] </h2>
+		<br><br>
+	</div>
+	
+	<div th:if="${messageError != null}" class="alert alert-danger text-center">
+			[[${messageError}]]
+	</div>
+	
+	<form th:action="@{/products/save}" method="post" style="max-width: 1800px; margin: 0 auto" enctype="multipart/form-data"
+	th:object="${product}" >
+		<input type="hidden" th:field="*{id}"/>
+	<div>
+		<div>
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+			  <li class="nav-item">
+			    <a class="nav-link active" data-toggle="tab" href="#overview" role="tab" >Overview</a>
+			  </li>
+			  <li class="nav-item">
+			    <a class="nav-link" data-toggle="tab" href="#description" role="tab" >Description</a>
+			  </li>
+			  <li class="nav-item">
+			    <a class="nav-link" data-toggle="tab" href="#images" role="tab">Images</a>
+			  </li>
+			  <li class="nav-item">
+			    <a class="nav-link" data-toggle="tab" href="#details" role="tab">Details</a>
+			  </li>
+			  <li class="nav-item">
+			    <a class="nav-link" data-toggle="tab" href="#shipping" role="tab">Shipping</a>
+			  </li>
+			</ul>
+			
+			<!-- Tab panes -->
+			<div class="tab-content">
+			  <div class="tab-pane active p-3" id="overview" role="tabpanel" >
+			  		<div th:replace="Product/products_overview :: content"> </div>
+			  </div>
+			  <div class="tab-pane" id="description" role="tabpanel" >
+			  		<div th:replace="Product/products_description :: content"> </div>
+			  </div>
+			  <div class="tab-pane" id="images" role="tabpanel">
+					<div th:replace="Product/products_images :: content"> </div>
+			  </div>
+			  <div class="tab-pane" id="details" role="tabpanel">
+			  	<div th:replace="Product/products_details :: content"> </div>
+			  	<div>
+	 			  	<input type="button" value="Add More Detail" class="btn btn-secondary" onclick="addDetailNextSection()"/>
+			  	</div>
+			  </div>
+			  <div class="tab-pane" id="shipping" role="tabpanel">
+					<div th:replace="Product/products_shipping :: content"> </div>
+			  </div>
+			</div>
+		</div>
+
+		<div class="text-center">
+			<input type="submit" value="Save" class="btn btn-primary m-3" />
+			<input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel" />
+		</div>
+	</div>
+	
+	</form>
+	
+	
+	<div th:replace="modal_fragments :: modal_dialog "></div>	
+	
+	<div th:replace="fragments :: footer"></div>
+</div>
+
+<script th:src="@{/js/product_form.js}"></script>
+<script th:src="@{/js/product_form_overview.js}"></script>
+<script th:src="@{/js/product_form_images.js}"></script>
+<script th:src="@{/js/product_form_details.js}"></script>
+<script th:src="@{/js/common_form.js}"></script>
+<script type="text/javascript">
+	MAX_FILE_SIZE = 1048576; //1 MB
+	moduleURL = "[[@{/products}]]";
+	brandModuleURL = "[[@{/brands}]]";
+	defaultImageThumbnailSrc = "[[@{/images/image-thumbnail.png}]]";
+	checkUniqueUrl = "[[@{/products/check_unique}]]";
+
+</script>
+
+</body>
+</html>

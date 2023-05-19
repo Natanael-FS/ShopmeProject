@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-<head th:replace="fragments :: page_head('Brand - Shopme Admin')" />
+<head th:replace="fragments :: page_head('Brand - Shopme Admin', 'none')" />
+
 <body>
 <div class="container-fluid">
 	
@@ -32,7 +33,6 @@
 					</th>
 					<th>
 						<th th:replace="fragments :: column_link('/brands','name', 'Brand Name', 'tag')" />
-
 					</th>
 					<!-- 
 					<th>

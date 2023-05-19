@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns :th="http://www.thymeleaf.org">
 
-<head th:fragment="page_head(title)">
+<head th:fragment="page_head(title, remove)" th:remove="${remove}">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
 
@@ -101,19 +101,19 @@
 		<div th:fragment="status(enabled, entityName, entityURL)" th:remove="tag">
 			<a th:if="${enabled == true}" class="fas fa-check-circle fa-2x icon-green" style="text-decoration: none;" 
 				th:href="@{${entityURL} + '/enabled/false'}"
-				th:title="'Disable this' + ${entityName}"  
+				th:title="'Disable this ' + ${entityName}"  
 				></a>
 	
 			<a th:if="${enabled == false}" class="fas fa-circle fa-2x icon-dark" style="text-decoration: none;" 
 				th:href="@{${entityURL} + '/enabled/true'}"
-				title="'Enabled this' + ${entityName}"
+				th:title="'Enabled this '+ ${entityName}"
 				></a>	
 		</div>
 		
 		<div th:fragment="edit(entityName, editURL)" th:remove="tag">
 			<a class="fas fa-edit fa-2x icon-green" 
 				th:href="@{${editURL}}"
-				title="'Edit this ' + ${entityName} "></a>	
+				th:title="'Edit this ' + ${entityName} "></a>	
 		</div>
 		
 		<div th:fragment="delete(entityName, entityId, deleteURL, visible)" th:remove="tag">
@@ -122,7 +122,7 @@
 				<a class="fas fa-trash fa-2x icon-red link-delete" 
 					th:href="@{${deleteURL}}"
 					th:entityId="${entityId}"
-					title="'Delete this ' + ${entityName} "></a>	
+					th:title="'Delete this ' + ${entityName} "></a>	
 			</th:block>
 		</div>
 
