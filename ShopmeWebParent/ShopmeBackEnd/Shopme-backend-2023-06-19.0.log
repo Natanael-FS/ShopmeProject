@@ -1,0 +1,45 @@
+2023-06-19 13:43:20.905  INFO 33392 --- [restartedMain] c.shopme.admin.ShopmeBackEndApplication  : Starting ShopmeBackEndApplication using Java 17.0.4 on DESKTOP-M9MCLSC with PID 33392 (C:\STS\workspace\ShopmeProject\ShopmeWebParent\ShopmeBackEnd\target\classes started by dartmedia in C:\STS\workspace\ShopmeProject\ShopmeWebParent\ShopmeBackEnd)
+2023-06-19 13:43:20.910  INFO 33392 --- [restartedMain] c.shopme.admin.ShopmeBackEndApplication  : No active profile set, falling back to 1 default profile: "default"
+2023-06-19 13:43:21.005  INFO 33392 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-06-19 13:43:21.007  INFO 33392 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-06-19 13:43:22.087  INFO 33392 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-06-19 13:43:22.189  INFO 33392 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 87 ms. Found 5 JPA repository interfaces.
+2023-06-19 13:43:23.107  INFO 33392 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-06-19 13:43:23.110  INFO 33392 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : Loaded Apache Tomcat Native library [1.2.33] using APR version [1.7.0].
+2023-06-19 13:43:23.112  INFO 33392 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+2023-06-19 13:43:23.113  INFO 33392 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2023-06-19 13:43:23.121  INFO 33392 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 1.1.1o  3 May 2022]
+2023-06-19 13:43:23.137  INFO 33392 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-06-19 13:43:23.137  INFO 33392 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.65]
+2023-06-19 13:43:23.252  INFO 33392 --- [restartedMain] o.a.c.c.C.[.[localhost].[/ShopmeAdmin]   : Initializing Spring embedded WebApplicationContext
+2023-06-19 13:43:23.253  INFO 33392 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2245 ms
+2023-06-19 13:43:23.537  INFO 33392 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-06-19 13:43:23.644  INFO 33392 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.10.Final
+2023-06-19 13:43:24.019  INFO 33392 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-06-19 13:43:24.239  INFO 33392 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-06-19 13:43:25.184  INFO 33392 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-06-19 13:43:25.230  INFO 33392 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2023-06-19 13:43:26.191  INFO 33392 --- [restartedMain] org.hibernate.tuple.PojoInstantiator     : HHH000182: No default (no-argument) constructor for class: com.shopme.common.entity.ProductDetail (class must be instantiated by Interceptor)
+2023-06-19 13:43:27.051  INFO 33392 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-06-19 13:43:27.065  INFO 33392 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-06-19 13:43:27.913  WARN 33392 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-06-19 13:43:28.135  WARN 33392 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-06-19 13:43:28.136  INFO 33392 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/images/**']
+2023-06-19 13:43:28.137  WARN 33392 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-06-19 13:43:28.137  INFO 33392 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/js/**']
+2023-06-19 13:43:28.137  WARN 33392 --- [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-06-19 13:43:28.137  INFO 33392 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**']
+2023-06-19 13:43:28.215  INFO 33392 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7dd4b15f, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@602f5209, org.springframework.security.web.context.SecurityContextPersistenceFilter@74f156aa, org.springframework.security.web.header.HeaderWriterFilter@5b8a81e3, org.springframework.security.web.csrf.CsrfFilter@4664cb67, org.springframework.security.web.authentication.logout.LogoutFilter@45446614, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@dd9746b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3065e28e, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@74a84da0, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@e3c36bd, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2b2ba84f, org.springframework.security.web.session.SessionManagementFilter@773425d6, org.springframework.security.web.access.ExceptionTranslationFilter@7b49d9ab, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@2dd31aa2]
+2023-06-19 13:43:28.443  INFO 33392 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2023-06-19 13:43:29.106  INFO 33392 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2023-06-19 13:43:29.165  INFO 33392 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path '/ShopmeAdmin'
+2023-06-19 13:43:29.177  INFO 33392 --- [restartedMain] c.shopme.admin.ShopmeBackEndApplication  : Started ShopmeBackEndApplication in 8.866 seconds (JVM running for 9.972)
+2023-06-19 13:44:14.856  INFO 33392 --- [http-nio-8080-exec-1] o.a.c.c.C.[.[localhost].[/ShopmeAdmin]   : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-06-19 13:44:14.856  INFO 33392 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-06-19 13:44:14.858  INFO 33392 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-06-19 15:50:46.095  INFO 33392 --- [RMI TCP Connection(138)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2023-06-19 15:50:46.129  INFO 33392 --- [RMI TCP Connection(138)-127.0.0.1] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-06-19 15:50:46.139  INFO 33392 --- [RMI TCP Connection(138)-127.0.0.1] o.a.c.c.C.[.[localhost].[/ShopmeAdmin]   : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2023-06-19 15:50:46.163  INFO 33392 --- [RMI TCP Connection(138)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-06-19 15:50:46.170  INFO 33392 --- [RMI TCP Connection(138)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-06-19 15:50:46.173  INFO 33392 --- [RMI TCP Connection(138)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

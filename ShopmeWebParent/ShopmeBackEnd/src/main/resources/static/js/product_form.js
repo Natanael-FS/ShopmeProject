@@ -5,6 +5,7 @@ dropdownCategories = $("#category");
 $(document).ready(function() {
 	$("#shortDescription").richText();
 	$("#fullDescription").richText();
+	
 	dropdownBrands.change(function() {
 		dropdownCategories.empty();
 		getCategories();
@@ -18,6 +19,7 @@ $(document).ready(function() {
 			showExtraImageThumbnail(this, index);
 		});
 	});
+	
 });
 
 function showExtraImageThumbnail(fileInput, index) {

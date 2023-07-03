@@ -9,8 +9,21 @@ $(document).ready(function() {
 		getCategories();
 	});	
 
-	getCategories();
+//	getCategories();
+	getCategoriesForNewForm();
 });
+
+function getCategoriesFormNewForm(){
+	catIdField = ${"#categoryId"};
+	editMode false;
+	
+	if(catIdField.length){
+		editMode = true;
+	}
+	
+	if(!editmodel) getCategories();
+	
+};
 
 function getCategories() {
 	brandId = dropdownBrands.val(); 

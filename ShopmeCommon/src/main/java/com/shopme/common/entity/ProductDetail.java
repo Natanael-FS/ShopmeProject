@@ -8,8 +8,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "product_details")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDetail {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,6 +64,18 @@ public class ProductDetail {
 		this.name = name;
 		this.value = value;
 		this.product = product;
+	}
+
+
+	public ProductDetail(Integer id, String name, String value, Product product) {
+		this.id = id;
+		this.name = name;
+		this.value = value;
+		this.product = product;
+	}
+
+	
+	public ProductDetail() {
 	}
 
 	@Override

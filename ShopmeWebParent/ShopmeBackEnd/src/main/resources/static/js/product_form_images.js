@@ -1,24 +1,32 @@
 var extraImagesCount = 0;
 $(document).ready(function() {
-	$("#shortDescription").richText();
-	$("#fullDescription").richText();
-	dropdownBrands.change(function() {
-		dropdownCategories.empty();
-		getCategories();
-	});	
-
-	getCategories();
-
 	$("input[name='extraImage']").each(function(index) {
 		extraImagesCount++;
 		$(this).change(function() {
+			
+			if(!checkFileSize(this)){
+				return;
+			}
+			
 			showExtraImageThumbnail(this, index);
+		});
+	});
+	
+	$("a[name='linkRemoveExtraImage']").each(function(index) {
+		$(this).click(function() {
+			removeExtraImage(index);
 		});
 	});
 });
 
 function showExtraImageThumbnail(fileInput, index) {
 	var file = fileInput.files[0];
+	fileName = file.name;
+	imageNameHiddenField = $("imageNames" + index);
+	if(imageNameHiddenField.length){
+		imageNameHiddenField.val(fileName);
+	};
+	
 	var reader = new FileReader();
 	reader.onload = function(e) {
 		$("#extraThumbnail" + index).attr("src", e.target.result);

@@ -2,6 +2,7 @@ package com.shopme.admin.product;
 
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -54,8 +55,12 @@ public class ProductService {
 		return repository.save(product);		
 	}
 	
-	public Product get(Integer id) {
-		return repository.findById(id).get();
+	public Product get(Integer id) throws ProductNotFoundExecption {
+		try {
+			return repository.findById(id).get();
+		} catch (NoSuchElementException e) {
+			throw new ProductNotFoundExecption("Could not find Product with Id : " + id);
+		}
 		
 	}
 	

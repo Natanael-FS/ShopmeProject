@@ -20,6 +20,8 @@
 	<form th:action="@{/products/save}" method="post" style="max-width: 1800px; margin: 0 auto" enctype="multipart/form-data"
 	th:object="${product}" >
 		<input type="hidden" th:field="*{id}"/>
+		<input th:if="${category != null}" type="hidden" 
+		id="categoryId" th:value="*{category.id}"/>
 	<div>
 		<div>
 			<!-- Nav tabs -->
@@ -52,11 +54,11 @@
 			  <div class="tab-pane" id="images" role="tabpanel">
 					<div th:replace="Product/products_images :: content"> </div>
 			  </div>
-			  <div class="tab-pane" id="details" role="tabpanel">
-			  	<div th:replace="Product/products_details :: content"> </div>
-			  	<div>
-	 			  	<input type="button" value="Add More Detail" class="btn btn-secondary" onclick="addDetailNextSection()"/>
-			  	</div>
+			  <div class="tab-pane p-3" id="details" role="tabpanel">
+				  	<div th:replace="Product/products_details :: content"> </div>
+				  	<div>
+		 			  	<input type="button" value="Add More Detail" class="btn btn-secondary" onclick="addDetailNextSection()"/>
+				  	</div>
 			  </div>
 			  <div class="tab-pane" id="shipping" role="tabpanel">
 					<div th:replace="Product/products_shipping :: content"> </div>
@@ -78,7 +80,7 @@
 	<div th:replace="fragments :: footer"></div>
 </div>
 
-<script th:src="@{/js/product_form.js}"></script>
+<!-- <script th:src="@{/js/product_form.js}"></script> -->
 <script th:src="@{/js/product_form_overview.js}"></script>
 <script th:src="@{/js/product_form_images.js}"></script>
 <script th:src="@{/js/product_form_details.js}"></script>
