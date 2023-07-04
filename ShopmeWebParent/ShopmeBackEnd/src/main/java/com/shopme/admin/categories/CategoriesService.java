@@ -10,6 +10,7 @@ import java.util.TreeSet;
 
 import javax.transaction.Transactional;
 
+import org.apache.poi.poifs.property.Parent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +23,7 @@ import com.shopme.common.entity.Category;
 @Service
 @Transactional
 public class CategoriesService {
-	public static final int ROOT_CATEGORIES_PER_PAGE = 4;
+	public static final int ROOT_CATEGORIES_PER_PAGE = 1;
 			
 	@Autowired
 	private CategoryRepository repo;
@@ -65,12 +66,13 @@ public class CategoriesService {
 		return hierarchicalCategories;
 	}
 	
-	public List<Category> listCategoriesUsedInForm() {
+	
+	public List<Category> listCategoriesUsedInForm() {	
 		List<Category> findCategoriesInDb = new ArrayList<>();
 
 //		Iterable<Category> findCategories = repo.listRootCategory(Sort.by("name").ascending());
 		Iterable<Category> findCategories = repo.findAll();
-		
+		System.out.println("findCat - "+findCategories.toString());
 		for (Category category : findCategories) {
 			if (category.getParent() == null) {
 				findCategoriesInDb.add(Category.copyIdAndName(category));
@@ -85,6 +87,53 @@ public class CategoriesService {
 				}
 			}
 		}
+		System.out.println("findCategoriesInDb - "+findCategoriesInDb.toString());
+
+		return findCategoriesInDb;
+	}
+	
+	private void listSubCategoriesUsedInForm(List<Category> categoriesUsedInForm, 
+			Category parent, int subLevel){
+		int newSubLevel = subLevel + 1;
+		Set<Category> children = sortSubCategories(parent.getChildren());
+
+		for (Category subCategory : children) {
+			String name = "";
+			for (int i = 0; i < newSubLevel; i++) {				
+				name += "--";
+			}
+			name += subCategory.getName();
+			System.out.println("tes = " + name );
+
+			categoriesUsedInForm.add(Category.copyIdAndName(subCategory.getId(), name));
+
+			listSubCategoriesUsedInForm(categoriesUsedInForm, subCategory, newSubLevel);
+		}		
+	}
+
+/*	
+	public List<Category> listCategoriesUsedInForm() {
+		List<Category> findCategoriesInDb = new ArrayList<>();
+
+//		Iterable<Category> findCategories = repo.listRootCategory(Sort.by("name").ascending());
+		Iterable<Category> findCategories = repo.findAll();
+		System.out.println("findCat - "+findCategories.toString());
+		for (Category category : findCategories) {
+//			if (category.getParent() == null) {
+				findCategoriesInDb.add(Category.copyIdAndName(category));
+				
+				Set<Category> children = sortSubCategories(category.getChildren());
+				for (Category subCategory: children) {
+					String name = "--"+subCategory.getName();
+					findCategoriesInDb.add(Category.copyIdAndName(subCategory.getId(), name));
+
+					listSubCategoriesUsedInForm(findCategoriesInDb, subCategory, 1);
+					
+				}
+//			}
+		}
+		System.out.println("findCategoriesInDb - "+findCategoriesInDb.toString());
+
 		return findCategoriesInDb;
 	}
 	
@@ -95,15 +144,17 @@ public class CategoriesService {
 		
 		for (Category subCategory: children) {
 			for (int i = 0; i < subNewLvl; i++) {
-				name = "--"+name; // += -> name = name + "--"
+//				name = "--"+name; // += -> name = name + "--"
+//				name = "--"+name; // += -> name = name + "--"
+				name += "--"; // += -> name = name + "--"
 			}
 			name += subCategory.getName(); 
-
+			System.out.println("tes = " + name );
 			findCategoriesInDb.add(Category.copyIdAndName(subCategory.getId(), name));
 			listSubCategoriesUsedInForm(findCategoriesInDb, subCategory, subNewLvl);
 		}
 	}
-	
+*/
 	void listSubHierarchicalCategories(List<Category> hierarchicalCategories, Category parent, 
 			int subLevel, String sortDir){
 		Set<Category> children = sortSubCategories(parent.getChildren(), sortDir);
@@ -120,7 +171,7 @@ public class CategoriesService {
 			listSubHierarchicalCategories(hierarchicalCategories, subCategory, newSubLevel, sortDir);
 		}
 	}
-	
+
 	public String checkUnique(Integer id, String name, String alias) {
 		boolean isCreatingNew = (id == null || id == 0);
 		
@@ -218,6 +269,18 @@ public class CategoriesService {
 	}
 	
 	public Category save(Category category) {
+		Category parent = category.getParent();
+		if (parent!=null) {
+			String allParentIds = parent.getAllParentIDs() == null ? "-" : parent.getAllParentIDs();
+			allParentIds += String.valueOf(parent.getId()) + "-";
+			category.setAllParentIDs(allParentIds);
+		}
+
+		return repo.save(category);
+	}
+
+/*
+	public Category save(Category category) {
 		boolean isUpdatingcategory = (category.getId() != null);
 		
 		if (isUpdatingcategory) {
@@ -226,7 +289,7 @@ public class CategoriesService {
 		
 		return repo.save(category);
 	}
-	
+*/
 	
 	public Category getCategory(Integer id) {
 		Category category = repo.findById(id).get();

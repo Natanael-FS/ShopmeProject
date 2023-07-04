@@ -20,7 +20,7 @@ import net.bytebuddy.asm.Advice.Return;
 
 @Service
 public class ProductService {
-	public static final int BRANDS_PER_PAGE = 10;
+	public static final int PRODUCTS_PER_PAGE = 5;
 	@Autowired
 	ProductRepository repository;
 
@@ -28,15 +28,29 @@ public class ProductService {
 	 return repository.findAllProducts();	
 	}
 	
-	public Page<Product> listByPage(int pageNum, String sortField, String sortDir, String keyword){
+	public Page<Product> listByPage(int pageNum, String sortField, String sortDir, String keyword, Integer categoryId){
 		Sort sort = Sort.by(sortField);
 		
 		sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
-		Pageable pageable = PageRequest.of(pageNum-1, BRANDS_PER_PAGE, sort);
+		Pageable pageable = PageRequest.of(pageNum-1, PRODUCTS_PER_PAGE, sort);
 		
-		if (keyword!=null) {
-			return repository.findAll(keyword, pageable);
+		/*
+		  if (keyword!=null) { return repository.findAll(keyword, pageable); }
+		 */
+		
+		if (keyword != null && !keyword.isEmpty()) {
+
+			if (categoryId != null && categoryId > 0) {
+				String categoryIdMatch = "-" + String.valueOf(categoryId) + "-";
+				return repository.searchInCategory(categoryId, categoryIdMatch, keyword, pageable);
+			}
 		}
+		
+		if (categoryId != null &&categoryId > 0) {
+			String categoryIdMatchString = "-" + String.valueOf(categoryId) + "-";
+			return repository.findAllInCategory(categoryId, categoryIdMatchString, pageable);
+		}
+		
 		return repository.findAll(pageable);
 	}
 	

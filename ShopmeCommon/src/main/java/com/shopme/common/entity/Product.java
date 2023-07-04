@@ -44,7 +44,7 @@ public class Product {
 	@Column(unique = true, length = 256, nullable = false)
 	private String alias;
 	
-	@Column(length = 512, nullable = false, name = "short_description")
+	@Column(length = 1024, nullable = false, name = "short_description")
 	private String shortDescription;
 
 	@Column(length = 4096, nullable = false, name = "full_description")
@@ -61,7 +61,6 @@ public class Product {
 	@Column(name = "in_stock")
 	private boolean inStock;
 	private boolean enabled;
-
 
 	private float cost;
 	private float price;
@@ -91,11 +90,18 @@ public class Product {
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProductDetail> details = new ArrayList<>();
 	
-	//transient
 	@Transient
 	public String getMainImagePath() {
 		if (id == null || mainImage == null) return "/images/image-thumbnail.png";
 		return "/product-images/" + this.id + "/" + this.mainImage ;
+	}
+	
+	@Transient
+	public String getShortName() {
+		if (name.length() > 70) {
+			return name.substring(0, 70).concat("..");
+		}
+		return name;
 	}
 	
 	// Getter & Setter

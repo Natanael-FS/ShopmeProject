@@ -38,7 +38,7 @@
 	
 	<a th:fragment="page_link(moduleURL,pageNum,label)" class="page-link" 
 	th:href="@{${moduleURL} + '/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' +${sortDir} 
-	+ ${keyword != null ? '&keyword=' + keyword : ''} } ">
+	+ ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}} ">
 			[[${label}]]
 	</a>
 	
@@ -73,29 +73,29 @@
 	<!-- USER END -->
 	
 	
-		<!-- CATEGORY -->
-		<div th:fragment="categories_status" th:remove="tag">
-			<a th:if="${categories.enabled == true}" class="fas fa-check-circle fa-2x icon-green" 
-				th:href="@{'/categories/' + ${categories.id} + '/enabled/false'}"
-				title="Disable this category"
-				></a>
-	
-			<a th:if="${categories.enabled == false}" class="fas fa-circle fa-2x icon-dark" 
-				th:href="@{'/categories/' + ${categories.id} + '/enabled/true'}"
-				title="Enable this category"
-				></a>	
-		</div>
+	<!-- CATEGORY -->
+	<div th:fragment="categories_status" th:remove="tag">
+		<a th:if="${categories.enabled == true}" class="fas fa-check-circle fa-2x icon-green" 
+			th:href="@{'/categories/' + ${categories.id} + '/enabled/false'}"
+			title="Disable this category"
+			></a>
 
-		<div th:fragment="categories_actions" th:remove="tag">
-			<a class="fas fa-edit fa-2x icon-green" th:href="@{'/categories/edit/' + ${categories.id}}"
-				title="Edit this category"></a>
-			&nbsp; 
-			<a class="fas fa-trash fa-2x icon-red link-delete" 
-				th:href="@{'/categories/delete/' + ${categories.id}}"
-				th:categoriesId="${categories.id}"
-				title="Delete this category"></a>		
-		</div>
-		<!-- CATEGORY END -->
+		<a th:if="${categories.enabled == false}" class="fas fa-circle fa-2x icon-dark" 
+			th:href="@{'/categories/' + ${categories.id} + '/enabled/true'}"
+			title="Enable this category"
+			></a>	
+	</div>
+
+	<div th:fragment="categories_actions" th:remove="tag">
+		<a class="fas fa-edit fa-2x icon-green" th:href="@{'/categories/edit/' + ${categories.id}}"
+			title="Edit this category"></a>
+		&nbsp; 
+		<a class="fas fa-trash fa-2x icon-red link-delete" 
+			th:href="@{'/categories/delete/' + ${categories.id}}"
+			th:categoriesId="${categories.id}"
+			title="Delete this category"></a>		
+	</div>
+	<!-- CATEGORY END -->
 	
 	<!-- REFACTOR -->
 		<div th:fragment="status(enabled, entityName, entityURL)" th:remove="tag">

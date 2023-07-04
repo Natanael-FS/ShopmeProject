@@ -35,7 +35,9 @@ public class Category {
 
 	private Boolean enabled;
 
-	
+	@Column(name = "all_parent_ids", length = 256, nullable = true)
+	private String allParentIDs;
+
 	@OneToOne
 	@JoinColumn(name= "parent_id")
 	private Category parent;
@@ -49,6 +51,14 @@ public class Category {
 			return "/images/image-thumbnail.png";
 //		System.out.println("/category-images/"+this.id+"/"+this.image);
 		return "/category-images/"+this.id+"/"+this.image;
+	}
+	
+	public String getAllParentIDs() {
+		return allParentIDs;
+	}
+
+	public void setAllParentIDs(String allParentIDs) {
+		this.allParentIDs = allParentIDs;
 	}
 	
 	@Transient
