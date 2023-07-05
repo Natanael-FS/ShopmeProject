@@ -13,8 +13,10 @@ import javax.persistence.Id;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -28,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.shopme.admin.FileUploadUtil;
 import com.shopme.admin.brand.BrandService;
 import com.shopme.admin.categories.CategoriesService;
+import com.shopme.admin.security.ShopmeUserDetail;
 import com.shopme.common.entity.Brand;
 import com.shopme.common.entity.Category;
 import com.shopme.common.entity.Product;
@@ -66,7 +69,7 @@ public class ProductController {
 		List<Category> listCategories = categoriesService.listCategoriesUsedInForm();
 		
 		String reverseSortDirString = sortDir.equals("asc") ? "desc" : "asc";
-		System.out.println("reverseSortDirString : "+reverseSortDirString);
+//		System.out.println("reverseSortDirString : "+reverseSortDirString);
 
 		long startCount = (pageNum-1) * productService.PRODUCTS_PER_PAGE + 1;
 		long endCount = startCount + productService.PRODUCTS_PER_PAGE - 1;
@@ -113,15 +116,21 @@ public class ProductController {
 	
 	@PostMapping("/products/save")
 	public String saveProduct(Product product, RedirectAttributes ra,
-			@RequestParam("fileImage") MultipartFile multipartFile, 
-			@RequestParam("extraImage") MultipartFile[] extraMultipartFiles,
+			@RequestParam(value = "fileImage", required = false) MultipartFile multipartFile, 
+			@RequestParam(value = "extraImage",required = false) MultipartFile[] extraMultipartFiles,
 			@RequestParam(name = "detailIDs", required = false) Integer[] detailIDs,
 			@RequestParam(name = "detailNames", required = false ) String[] detailNames,
 			@RequestParam(name = "detailValues", required = false ) String[] detailValue,
 			@RequestParam(name = "imageIDs", required = false) String [] imageIDs,
-			@RequestParam(name = "imageNames", required = false) String [] imageNames
+			@RequestParam(name = "imageNames", required = false) String [] imageNames,
+			@AuthenticationPrincipal ShopmeUserDetail loggedUser
 			)throws IOException {
 
+		if (loggedUser.hasRole("Salesperson")) {
+			System.out.println("this is a salesperson");
+			productService.saveProductPrice(product);
+			ra.addFlashAttribute("messageSuccess", "The product has been saved successfully.");
+		}
 		log.info("ProductController | saveProduct is started");
 		log.info("ProductController | saveProduct | multipartFile.isEmpty() : " + multipartFile.isEmpty());
 		log.info("ProductController | saveProduct | extraMultipartFiles size : " + extraMultipartFiles.length);

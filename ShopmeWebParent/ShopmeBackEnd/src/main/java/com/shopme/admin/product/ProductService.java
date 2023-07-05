@@ -69,6 +69,15 @@ public class ProductService {
 		return repository.save(product);		
 	}
 	
+	public void saveProductPrice(Product product) {
+		Product productDb = repository.findById(product.getId()).get();
+		productDb.setPrice(product.getPrice());
+		productDb.setDiscountPercent(product.getDiscountPercent());
+		productDb.setCost(product.getCost());
+		
+		repository.save(productDb);	
+	}
+	
 	public Product get(Integer id) throws ProductNotFoundExecption {
 		try {
 			return repository.findById(id).get();

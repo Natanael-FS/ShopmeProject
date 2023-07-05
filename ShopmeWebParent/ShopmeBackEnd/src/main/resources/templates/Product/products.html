@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
 <head th:replace="fragments :: page_head('Product - Shopme Admin', 'none')" />
 <body>
 <div class="container-fluid">
@@ -8,10 +10,14 @@
 	
 	<div>
 		<h1> Manage Product  </h1>
-		<a th:href="@{/products/new}">Create Product</a>	
-		&nbsp;|&nbsp;
-		<a th:href="@{/products/export/csv}">Export to CSV</a>
-		&nbsp;|&nbsp;
+		
+		<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+			<a th:href="@{/products/new}">Create Product</a>	
+			&nbsp;|&nbsp;
+			<a th:href="@{/products/export/csv}">Export to CSV</a>
+			&nbsp;|&nbsp;		
+		</th:block>
+		
 		<a th:href="@{/products/export/excel}">Export to Excel</a>
 		&nbsp;|&nbsp;
 		<a th:href="@{/products/export/pdf}">Export to PDF</a>
@@ -25,7 +31,7 @@
 			<input type="hidden" name="sortField" th:value="${sortField}" />
 			<input type="hidden" name="sortDir" th:value="${sortDir}" />
 
-			Category:&nbsp;
+			Category :&nbsp;
 			<select class="form-control" name="categoryId" id="dropdownCategory">
 				<option value="0">All Categories</option>
 
@@ -34,7 +40,7 @@
 				</th:block>
 			</select>
 
-			&nbsp;Filter:&nbsp;
+			&nbsp;Filter :&nbsp;
 			<input type="search" name="keyword" th:value="${keyword}" class="form-control" required/>
 			&nbsp;&nbsp;
 			<button type="submit" class="btn btn-primary">
@@ -64,7 +70,9 @@
 					</th> 	
 					<th>Brand</th> 
 					<th> Category </th>						
-					<th> Enabled </th>						
+					<th>
+						<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')"> Enabled </th:block>	
+					</th>						
 					<th>  </th>
 				</tr>
 			</thead>
@@ -95,14 +103,51 @@
 							th:href="@{'/products/detail/' + ${product.id}}", 
 							title="View details of this product"></a>
 								&nbsp;
-							<div th:replace="fragments :: edit('product', '/products/edit/' + ${product.id})" />
+							<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Salesperson')">
+								<div th:replace="fragments :: edit('product', '/products/edit/' + ${product.id})" />
+							</th:block>
 								&nbsp;
-							<div th:replace="fragments :: delete('product', ${product.id},'/products/delete/' + ${product.id}, true)" />
+							<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+								<div th:replace="fragments :: delete('product', ${product.id},'/products/delete/' + ${product.id}, true)" />
+							</th:block>
 						</td>
 					</tr>
 			</tbody>
 			
 		</table>
+	</div>
+	
+	
+	<div class="less-details">
+		<div th:each="product : ${listProducts}" class="row m-1">
+			<div class="col-4"> 
+				<img th:src="@{${product.mainImagePath}}" style="width: 80px" class="img-fluid" />
+			 </div>
+			 <div class="col-8">
+			 	<div>
+			 		<a title="View Details Of This Product" 
+					th:href="@{'/products/detail/'+${product.id}}" 
+					class="link-detail"/>
+					 [[${product.shortName}]]
+			 	</div>
+			 	<div class="mt-2">
+						<div th:replace="fragments :: status(${product.enabled}, 'product', '/products/' + ${product.id})" />
+						&nbsp;
+						
+						<a class="fas fa-file-alt fa-2x icon-silver link-detail" 
+						th:href="@{'/products/detail/' + ${product.id}}", 
+						title="View details of this product"></a>
+							&nbsp;
+						<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Salesperson')">
+							<div th:replace="fragments :: edit('product', '/products/edit/' + ${product.id})" />
+						</th:block>
+							&nbsp;
+						<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+							<div th:replace="fragments :: delete('product', ${product.id},'/products/delete/' + ${product.id}, true)" />
+						</th:block>
+			 	</div>
+			 </div>
+		</div>
 	</div>
 	
 	

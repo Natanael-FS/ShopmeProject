@@ -72,7 +72,7 @@ public class CategoriesService {
 
 //		Iterable<Category> findCategories = repo.listRootCategory(Sort.by("name").ascending());
 		Iterable<Category> findCategories = repo.findAll();
-		System.out.println("findCat - "+findCategories.toString());
+//		System.out.println("findCat - "+findCategories.toString());
 		for (Category category : findCategories) {
 			if (category.getParent() == null) {
 				findCategoriesInDb.add(Category.copyIdAndName(category));
@@ -87,7 +87,7 @@ public class CategoriesService {
 				}
 			}
 		}
-		System.out.println("findCategoriesInDb - "+findCategoriesInDb.toString());
+//		System.out.println("findCategoriesInDb - "+findCategoriesInDb.toString());
 
 		return findCategoriesInDb;
 	}
@@ -103,10 +103,9 @@ public class CategoriesService {
 				name += "--";
 			}
 			name += subCategory.getName();
-			System.out.println("tes = " + name );
+//			System.out.println("tes = " + name );
 
 			categoriesUsedInForm.add(Category.copyIdAndName(subCategory.getId(), name));
-
 			listSubCategoriesUsedInForm(categoriesUsedInForm, subCategory, newSubLevel);
 		}		
 	}
