@@ -26,7 +26,7 @@ public class CategoryRepositoryTest {
 //			String cat = (category.getParent().getName()==null) ? "0" : category.getParent().getName();			
 //			System.out.println(category.getName() + " (" +category.getEnabled() + ") , " + cat );
 			
-			System.out.println(category.getName() + " (" +category.getEnabled() + ") ");
+			System.out.println(category.getName() + " (" +category.isEnabled() + ") ");
 		});
 	}
 	
@@ -37,16 +37,17 @@ public class CategoryRepositoryTest {
 	}
 	
 	public List<Category> listNoChildrenCategories() {
-		List<Category> listNoChildrenCategories = new ArrayList(); 
+		List<Category> listNoChildrenCategories = new ArrayList<>();
+
 		List<Category> listEnabledCategories = repo.findAllEnabled();
-		
-		listEnabledCategories.forEach(category ->{
+
+		listEnabledCategories.forEach(category -> {
 			Set<Category> children = category.getChildren();
 			if (children == null || children.size() == 0) {
-				listNoChildrenCategories().add(category);
+				listNoChildrenCategories.add(category);
 			}
 		});
-		
+
 		return listNoChildrenCategories;
 	}
 	

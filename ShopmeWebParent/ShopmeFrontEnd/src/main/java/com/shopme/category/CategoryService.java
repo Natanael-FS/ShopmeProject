@@ -15,16 +15,17 @@ public class CategoryService {
 	CategoryRepository repo;
 	
 	public List<Category> listNoChildrenCategories() {
-		List<Category> listNoChildrenCategories = new ArrayList(); 
+		List<Category> listNoChildrenCategories = new ArrayList<>();
+
 		List<Category> listEnabledCategories = repo.findAllEnabled();
-		
-		listEnabledCategories.forEach(category ->{
+
+		listEnabledCategories.forEach(category -> {
 			Set<Category> children = category.getChildren();
 			if (children == null || children.size() == 0) {
-				listNoChildrenCategories().add(category);
+				listNoChildrenCategories.add(category);
 			}
 		});
-		
+
 		return listNoChildrenCategories;
 	}
 }

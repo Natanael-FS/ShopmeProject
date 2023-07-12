@@ -13,15 +13,15 @@ $(document).ready(function() {
 	getCategoriesForNewForm();
 });
 
-function getCategoriesFormNewForm(){
-	catIdField = ${"#categoryId"};
-	editMode false;
+function getCategoriesForNewForm(){
+	catIdField = $("#categoryId");
+	editMode = false;
 	
 	if(catIdField.length){
 		editMode = true;
 	}
 	
-	if(!editmodel) getCategories();
+	if(!editMode) getCategories();
 	
 };
 

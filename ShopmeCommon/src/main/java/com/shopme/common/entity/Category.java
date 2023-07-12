@@ -3,7 +3,6 @@ package com.shopme.common.entity;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.jar.Attributes.Name;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,57 +13,121 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import org.springframework.data.annotation.Transient;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "categories")
+@NoArgsConstructor
+@Getter
+@Setter
 public class Category implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	@Column(name = "name", nullable = false, unique = true)
+
+	@Column(length = 128, nullable = false, unique = true)
 	private String name;
-	
-	@Column(name = "alias", nullable = false, unique = true)
+
+	@Column(length = 64, nullable = false, unique = true)
 	private String alias;
-	
-	@Column(name = "image", nullable = false)
+
+	@Column(length = 128, nullable = false)
 	private String image;
 
-	private Boolean enabled;
-
-	@Column(name = "all_parent_ids", length = 256, nullable = true)
-	private String allParentIDs;
-
-	@OneToOne
-	@JoinColumn(name= "parent_id")
-	private Category parent;
-	
-	@OneToMany( mappedBy = "parent")
-	private Set<Category> children = new HashSet<>();
-	
-	@Transient
-	public String getImagePath() {
-		if(id == null)
-			return "/images/image-thumbnail.png";
-//		System.out.println("/category-images/"+this.id+"/"+this.image);
-		return "/category-images/"+this.id+"/"+this.image;
-	}
-	
-	public String getAllParentIDs() {
-		return allParentIDs;
-	}
-
-	public void setAllParentIDs(String allParentIDs) {
-		this.allParentIDs = allParentIDs;
-	}
+	private boolean enabled;
 	
 	@Transient
 	private boolean hasChildren;
 	
+	@OneToOne
+	@JoinColumn(name = "parent_id")
+	private Category parent;
+
+	@OneToMany(mappedBy = "parent")
+	private Set<Category> children = new HashSet<>();
+	
+	@Column(name = "all_parent_ids", length = 256, nullable = true)
+	private String allParentIDs;
+	
+	
+	
+	public Category() {
+	}
+
+	public Category(Integer id) {
+		this.id = id;
+	}
+
+	public Category(String name) {
+		this.name = name;
+		this.alias = name;
+		this.image = "default.png";
+	}
+
+	public Category(String name, Category parent) {
+		this(name);
+		this.parent = parent;
+	}
+	
+	public Category(Integer id, String name, String alias) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.alias = alias;
+	}
+	
+	public static Category copyIdAndName(Category category) {
+		Category copyCategory = new Category();
+		copyCategory.setId(category.getId());
+		copyCategory.setName(category.getName());
+
+		return copyCategory;
+	}
+
+	public static Category copyIdAndName(Integer id, String name) {
+		Category copyCategory = new Category();
+		copyCategory.setId(id);
+		copyCategory.setName(name);
+
+		return copyCategory;
+	}
+	
+	public static Category copyFull(Category category) {
+		Category copyCategory = new Category();
+		copyCategory.setId(category.getId());
+		copyCategory.setName(category.getName());
+		copyCategory.setImage(category.getImage());
+		copyCategory.setAlias(category.getAlias());
+		copyCategory.setEnabled(category.isEnabled());
+		copyCategory.setHasChildren(category.getChildren().size() > 0);
+		return copyCategory;		
+	}
+
+	public static Category copyFull(Category category, String name) {
+		Category copyCategory = Category.copyFull(category);
+		copyCategory.setName(name);
+
+		return copyCategory;
+	}
+	
+	@Transient
+	public String getImagePath() {
+		
+		if (this.id == null) return "/images/image-thumbnail.png";
+		
+		return "/category-images/" + this.id + "/" + this.image;
+	}
+	
+	@Override
+	public String toString() {
+		return this.name;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -97,12 +160,20 @@ public class Category implements Serializable{
 		this.image = image;
 	}
 
-	public Boolean getEnabled() {
+	public boolean isEnabled() {
 		return enabled;
 	}
 
-	public void setEnabled(Boolean enabled) {
+	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public boolean isHasChildren() {
+		return hasChildren;
+	}
+
+	public void setHasChildren(boolean hasChildren) {
+		this.hasChildren = hasChildren;
 	}
 
 	public Category getParent() {
@@ -117,98 +188,15 @@ public class Category implements Serializable{
 		return children;
 	}
 
-	public void setChildren(Set<Category> childrenCategories) {
-		this.children= childrenCategories;
-	}
-	
-	public boolean isHasChildren() {
-		return hasChildren;
+	public void setChildren(Set<Category> children) {
+		this.children = children;
 	}
 
-	public void setHasChildren(boolean hasChildren) {
-		this.hasChildren = hasChildren;
+	public String getAllParentIDs() {
+		return allParentIDs;
 	}
 
-	public Category() {
+	public void setAllParentIDs(String allParentIDs) {
+		this.allParentIDs = allParentIDs;
 	}
-	
-	
-	public Category(Integer id) {
-		this.id = id;
-	}
-	
-	public static Category copyIdAndName(Category category) {
-		Category copycategory = new Category();
-		copycategory.setId(category.getId());
-		copycategory.setName(category.getName());
-		return copycategory;
-	}
-	
-	public static Category copyIdAndName(Integer id, String name) {
-		Category copycategory = new Category();
-		copycategory.setId(id);
-		copycategory.setName(name);
-		return copycategory;
-	}
-	
-	public static Category copyFull(Category category) {
-		Category copycategory = new Category();
-		copycategory.setId(category.getId());
-		copycategory.setName(category.getName());
-		copycategory.setAlias(category.getAlias());
-		copycategory.setImage(category.getImage());
-		copycategory.setEnabled(category.getEnabled());
-		copycategory.setHasChildren(category.getChildren().size() > 0);
-
-		return copycategory;
-	}
-	
-	public static Category copyFull(Category category, String name) {
-		Category copycategory = Category.copyFull(category);
-		copycategory.setName(name);
-		
-		return copycategory;
-	}
-	
-	public Category(String name) {
-		this.name = name;
-		this.alias = name;
-		this.image = "default.png";
-	}
-
-	public Category(String name, Category parent) {
-		this(name);
-		this.parent = parent;
-	}
-		
-	public Category(Integer id, String name, String alias) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.alias = alias;
-	}
-	
-	@Override
-	public String toString() {
-		return this.name;
-	}
-	
-//	public Category(Integer id, String name, String alias, String image, Boolean enabled, Category parent,
-//			Set<Category> children) {
-//		this.id = id;
-//		this.name = name;
-//		this.alias = alias;
-//		this.image = image;
-//		this.enabled = enabled;
-//		this.parent = parent;
-//		this.children = children;
-//	}
-
-//	@Override
-//	public String toString() {
-//		return "Category [id=" + id + ", name=" + name + ", alias=" + alias + ", image=" + image + ", enabled="
-//				+ enabled + ", parent=" + parent + ", children=" + children + "]";
-//	}
-
-	
 }
