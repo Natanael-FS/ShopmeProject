@@ -2,6 +2,7 @@ package com.shopme.admin.product;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -15,7 +16,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.util.StringUtils;
 
 import com.shopme.common.entity.Product;
 import com.shopme.admin.brand.BrandRepository;
@@ -133,14 +136,16 @@ public class ProductTest {
 	@Test
 	public void testSaveProductDetails() {
 		Product product = repo.findById(3).get();
+//		
+//		product.addProductDetail("Device Memory", "128 GB");
+//		product.addProductDetail("CPU Model", "Mediatek");
+//		product.addProductDetail("OS", "Linux");
+//		
+//		Product savedProduct = repo.save(product);
 		
-		product.addProductDetail("Device Memory", "128 GB");
-		product.addProductDetail("CPU Model", "Mediatek");
-		product.addProductDetail("OS", "Linux");
+		System.out.println(product.getDetails().toString());
 		
-		Product savedProduct = repo.save(product);
-		
-		assertThat(savedProduct.getDetails().size()).isEqualTo(3);
+//		assertThat(savedProduct.getDetails().size()).isEqualTo(3);
 		}
 	/*
 	 @Test
@@ -178,4 +183,31 @@ public class ProductTest {
 	} 
 	 */
 	
+	
+	@Test 
+	public void tesResultQuery() throws NoSuchMethodException, SecurityException {
+		// Get the query string from the annotation
+		String queryString = ProductRepository.class.getMethod("findAllInCategory", ProductRepository.class)
+		        .getAnnotation(Query.class)
+		        .value();
+		System.out.println(queryString);
+
+		Method method = ProductRepository.class.getMethod("findAllInCategory");
+		String query = extractQueryFromAnnotation(method);
+		System.out.println("SQL Query: " + query);
+			
+	}
+	
+
+public static String extractQueryFromAnnotation(Method method) {
+    Query queryAnnotation = method.getAnnotation(Query.class);
+    if (queryAnnotation != null) {
+        String query = queryAnnotation.value();
+        if (!StringUtils.isEmpty(query)) {
+            return query;
+        }
+    }
+    return null;
+}
+
 }

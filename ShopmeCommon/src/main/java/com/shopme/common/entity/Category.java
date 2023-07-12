@@ -1,5 +1,6 @@
 package com.shopme.common.entity;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.jar.Attributes.Name;
@@ -18,7 +19,7 @@ import org.springframework.data.annotation.Transient;
 
 @Entity
 @Table(name = "categories")
-public class Category {
+public class Category implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -186,7 +187,12 @@ public class Category {
 		this.name = name;
 		this.alias = alias;
 	}
-
+	
+	@Override
+	public String toString() {
+		return this.name;
+	}
+	
 //	public Category(Integer id, String name, String alias, String image, Boolean enabled, Category parent,
 //			Set<Category> children) {
 //		this.id = id;

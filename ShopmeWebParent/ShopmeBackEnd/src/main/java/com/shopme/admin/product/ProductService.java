@@ -48,6 +48,7 @@ public class ProductService {
 		
 		if (categoryId != null &&categoryId > 0) {
 			String categoryIdMatchString = "-" + String.valueOf(categoryId) + "-";
+			System.out.println(categoryId+ " || " + categoryIdMatchString);
 			return repository.findAllInCategory(categoryId, categoryIdMatchString, pageable);
 		}
 		

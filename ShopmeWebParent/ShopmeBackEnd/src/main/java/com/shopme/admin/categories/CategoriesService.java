@@ -269,9 +269,12 @@ public class CategoriesService {
 	
 	public Category save(Category category) {
 		Category parent = category.getParent();
+		System.out.println(parent.getName());
 		if (parent!=null) {
 			String allParentIds = parent.getAllParentIDs() == null ? "-" : parent.getAllParentIDs();
+			System.out.println("parent : "+parent.getAllParentIDs());
 			allParentIds += String.valueOf(parent.getId()) + "-";
+			System.out.println(allParentIds);
 			category.setAllParentIDs(allParentIds);
 		}
 
