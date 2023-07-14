@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.shopme.category.CategoryRepository;
+import com.shopme.category.CategoryService;
 import com.shopme.common.entity.Category;
 
 @DataJpaTest
@@ -49,6 +50,30 @@ public class CategoryRepositoryTest {
 		});
 
 		return listNoChildrenCategories;
+	}
+	
+	@Test
+	public void testFindByAliasEnabled() {
+		Category cat = repo.findByAliasEnabled("camera");
+		System.out.println(cat.getName());
+		
+		List<Category> listCategoriesParents = getCategoryParents(cat);
+		listCategoriesParents.forEach(parent ->{
+			System.out.println(parent.toString());
+		});
+	}
+	
+	public List<Category> getCategoryParents(Category child){
+		List<Category> listParent = new ArrayList<>();
+		Category parent = child .getParent();
+		
+		while (parent != null) {
+			listParent.add(0, parent);
+			parent = parent.getParent();
+		}
+		listParent.add(child);
+		
+		return listParent;
 	}
 	
 }

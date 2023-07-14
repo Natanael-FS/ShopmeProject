@@ -15,6 +15,7 @@ import com.shopme.admin.categories.CategoryNotFoundException;
 import com.shopme.common.entity.Brand;
 import com.shopme.common.entity.Product;
 import com.shopme.common.entity.User;
+import com.shopme.common.exception.ProductNotFoundException;
 
 import net.bytebuddy.asm.Advice.Return;
 
@@ -79,20 +80,20 @@ public class ProductService {
 		repository.save(productDb);	
 	}
 	
-	public Product get(Integer id) throws ProductNotFoundExecption {
+	public Product get(Integer id) throws ProductNotFoundException {
 		try {
 			return repository.findById(id).get();
 		} catch (NoSuchElementException e) {
-			throw new ProductNotFoundExecption("Could not find Product with Id : " + id);
+			throw new ProductNotFoundException("Could not find Product with Id : " + id);
 		}
 		
 	}
 	
-	public void delete(Integer id) throws ProductNotFoundExecption{
+	public void delete(Integer id) throws ProductNotFoundException{
 		Long countById = repository.countById(id);
 
 		if (countById == null || countById == 0) {
-			throw new ProductNotFoundExecption("Could not find any product with ID " + id);			
+			throw new ProductNotFoundException("Could not find any product with ID " + id);			
 		}
 
 		repository.deleteById(id);
@@ -116,7 +117,7 @@ public class ProductService {
 	}
 	
 	
-	public void updateProductEnabledStatus(Integer id, boolean enabled) throws ProductNotFoundExecption {
+	public void updateProductEnabledStatus(Integer id, boolean enabled) throws ProductNotFoundException {
 		repository.updateEnabledStatus(id, enabled);
 	}
 }

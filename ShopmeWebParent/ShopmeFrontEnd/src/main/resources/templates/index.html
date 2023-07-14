@@ -8,19 +8,18 @@
 			<h1>Shopping by Categories</h1>
 		</div>
 		
-		<div class="row">
-			<div class-"col" th:each="cat : ${listCategories}">
-				<div> <img th:src="@{${cat.imagePath}}" width="50"/> </div>	
-				<div>
-					<a>[[${cat.name}]]</a>
-				</div>
-							
-			</div>
-		</div>
+		<div class="row row-cols-auto">
+		  <div class="col" th:each="cat : ${listCategories}">
+		    <div class="card h-100" >
+			  <img th:src="@{${cat.imagePath}}" class="card-img-top" height="80" width="60">
+		      <div class="card-body">
+				<a class="card-title" th:href="@{'/c/' + ${cat.alias}}">[[${cat.name}]]</a>
+		      </div>
+		    </div>
+		  </div>
+		</div>		
 
 		<div th:replace="navigation :: footer_menu"></div>
 	</div>
 </body>
-</html>
-
 </html>

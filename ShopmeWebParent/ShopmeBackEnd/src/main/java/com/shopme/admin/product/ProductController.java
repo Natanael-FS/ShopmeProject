@@ -35,6 +35,7 @@ import com.shopme.common.entity.Brand;
 import com.shopme.common.entity.Category;
 import com.shopme.common.entity.Product;
 import com.shopme.common.entity.ProductImage;
+import com.shopme.common.exception.ProductNotFoundException;
 
 @Controller
 public class ProductController {
@@ -167,7 +168,7 @@ public class ProductController {
 			model.addAttribute("pageTitle", "Edit Product (ID : " + id + ")");
 
 			return "Product/products_form";
-		} catch (ProductNotFoundExecption e) {
+		} catch (ProductNotFoundException e) {
 			ra.addFlashAttribute("message",e.getMessage());
 			return "redirect:/products";
 		}
@@ -182,7 +183,7 @@ public class ProductController {
 			model.addAttribute("product", product);
 			
 			return "Product/products_detail_modal";
-		} catch (ProductNotFoundExecption e) {
+		} catch (ProductNotFoundException e) {
 			ra.addFlashAttribute("message",e.getMessage());
 			return "redirect:/products";
 		}
@@ -192,7 +193,7 @@ public class ProductController {
 	
 	@GetMapping("/products/{id}/enabled/{status}")
 	public String updateProductEnabledStatus(@PathVariable("id") Integer id, 
-			@PathVariable("status") boolean enabled, RedirectAttributes redirectAttributes) throws ProductNotFoundExecption  
+			@PathVariable("status") boolean enabled, RedirectAttributes redirectAttributes) throws ProductNotFoundException  
 	{
 		productService.updateProductEnabledStatus(id, enabled);
 		
@@ -204,7 +205,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("products/delete/{id}")
-	public String deleteProduct(@PathVariable(name = "id")Integer id, RedirectAttributes ra) throws ProductNotFoundExecption
+	public String deleteProduct(@PathVariable(name = "id")Integer id, RedirectAttributes ra) throws ProductNotFoundException
 	{
 		try {
 			productService.delete(id);
@@ -219,7 +220,7 @@ public class ProductController {
 			
 			String message = "The Product id " + id + " has been deleted" ;
 			ra.addFlashAttribute("message", message);
-		} catch (ProductNotFoundExecption e) {
+		} catch (ProductNotFoundException e) {
 			log.info("ProductController | deleteProduct | messageError : " + e.getMessage());
 			
 			ra.addFlashAttribute("messageError", e.getMessage());
