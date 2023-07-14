@@ -19,6 +19,7 @@ public class ProductService {
 	ProductRepository productRepository;
 	
 	public static final int PRODUCTS_PER_PAGE = 10;
+	public static final int SEARCH_RESULT_PER_PAGE = 10;
 	
 	public Page<Product> listByCategories(int pageNum, Integer categoryId) {
 		String categoryIdMatch = "-" + categoryId + "-";
@@ -36,5 +37,8 @@ public class ProductService {
 		return product;
 	}
 	
-	
+	public Page<Product> search(String keyword, int pageNum){
+		Pageable pageable = PageRequest.of(pageNum-1, SEARCH_RESULT_PER_PAGE);
+		 return productRepository.search(keyword, pageable);
+	}
 }
