@@ -26,6 +26,9 @@ public class MvcConfig implements WebMvcConfigurer {
 		//Products
 		exposeDirectory("../product-images", registry);
 //		System.out.println("Category path "+categoryImagesPath);
+		
+		//Setting
+		exposeDirectory("../site-logo", registry);
 	}
 
 	private void exposeDirectory(String pathPattern, ResourceHandlerRegistry registry) {

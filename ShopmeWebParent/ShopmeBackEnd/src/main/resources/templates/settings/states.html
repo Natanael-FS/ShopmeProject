@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="content" th:remove="tag">
+	<div>
+		<br>
+		<p class="col-sm-8 ">
+			  use this page to manage States/Providence which will be displayed int the customer registrasion form. Click Load States List First.
+		</p>
+	</div>
+	
+	<div>
+		<input type="button" class="btn btn-primary m-2" value="Load Country List" id="btnLoadCountriesForStates"/>
+	</div>
+	
+	<div class="form-group row">
+		<label class="col-sm-2 col-form-label">Selected Country:</label>
+		<div class="col-sm-10">
+			<select class="form-control m-2" id="dropDownCountriesForStates"> </select>			
+		</div>
+	</div>
+	
+	<div class="form-group row">
+		<label class="col-sm-2 col-form-label">ALL States/Province:</label>
+
+		<div class="col-sm-10">
+			<select class="form-control m-2" style="height: 300px" size="3" id="dropDownStates"> </select>
+		</div>
+	</div>
+	
+	<div class="form-group row mt-4">
+	    <label class="col-sm-2 col-form-label" id="labelStatesName">State/Province Name: </label>
+	    <div class="col-sm-6 ml-2">
+		    <input type="text" class="form-control" id="fieldStatesName" minlength="3"/>    
+	    </div>
+		<div class="col-lg-3 mt-1">
+			<input type="button" id="btnAddStates" value="New" class="btn btn-secondary mr-2"></input>
+		    <input type="button" id="btnUpdateStates" value="Update" class="btn btn-secondary mr-2" disabled="disabled" ></input>
+		    <input type="button" id="btnDeleteStates" value="Delete" class="btn btn-secondary " disabled="disabled">  </input>
+		</div>	    
+	</div>	
+		
+</div>
+
+</body>
+</html>
