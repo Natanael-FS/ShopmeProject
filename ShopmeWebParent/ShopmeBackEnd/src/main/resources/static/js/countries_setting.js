@@ -29,7 +29,7 @@ $(document).ready(function() {
 		if (buttonAddCountry.val() == "Add"){
 			addCountry();
 		}else{
-			changeFormStateToNew();
+			changeFormCountryToNew();
 		}
 	});
 	
@@ -42,8 +42,18 @@ $(document).ready(function() {
 	});
 		
 });
+
+function validateFormCountry(){
+	formCountry = document.getElementById("formCountry");
+	if(!formCountry.checkValidity()){
+		formCountry.reportValidity();
+		return false;
+	}
+	return true;
+}
 		
 function addCountry(){
+	if(!validateFormCountry()) return;
 	url = contextPath + "countries/save";
 	countryName = fieldCountryName.val();
 	countryCode = fieldCountryCode.val();
@@ -87,7 +97,7 @@ function updateCountry(){
 		$("#dropDownCountries option:selected").text(countryName);
 		showToastMessage("The country has been updated ");
 		
-		changeFormToStateNew();
+		changeFormCountryToNew();
 	}).fail(function() {
 		showToastMessage("Error : could not connect to server or server encountered an error")
 	});
@@ -98,10 +108,16 @@ function deleteCountry(){
 	countryId = optionValue.split("-")[0];
 	url = contextPath + "countries/delete/" + countryId ;
 	
-	$.get(url, function(responseJSON){
-		$("#dropDownCountries option[value ='"+ optionValue +"']").remove();
-		changeFormStateToNew();
+	$.ajax({
+		type: 'DELETE',
+		url: url,
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader(csrfHeaderName, csrfValue);
+		}
 	}).done(function(){
+		$("#dropDownCountries option[value='" + optionValue + "']").remove();
+		changeFormCountryToNew();
+
 		showToastMessage("The Country has been deleted");
 	}).fail(function(){
 		showToastMessage("Error : could not connect to server or server encountered an error");
@@ -113,11 +129,11 @@ function selectedNewlyAddedCountry(countryId, countryCode, countryName){
 	$("<option>").val(optionValue).text(countryName).appendTo(dropDownCountry);
 	
 	$("#dropDownCountries option[value= '" + optionValue + "']").prop("selected", true);
-	fieldCountryCode().val("");
-	fieldCountryCode().val("").focus();	
+	fieldCountryCode.val("");
+	fieldCountryCode.val("").focus();	
 }		
 
-function changeFormStateToNew(){
+function changeFormCountryToNew(){
 	buttonAddCountry.val("Add");
 	labelCountryName.text("Country Name : ");
 	

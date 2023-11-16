@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments :: page_head('Users - Shopme Admin', 'none')" />
+<body>
+<div class="container-fluid">
+	
+	<div th:replace="navigation :: menu"></div>
+
+		
+	<div>
+		<h1> Manage Customers </h1>
+		<a th:href="@{/customers/export/csv}">Export to CSV</a>
+		
+	</div>
+	
+	<div th:replace="fragments :: search_form_and_message()" >	</div>
+	
+	<div class="full-details">
+			<table class="table table-bordered table-hover table-striped table-responsive-xL">
+				<thead class ="thead-dark">
+					<tr>
+						<th class="hideable-column">
+							<th th:replace="fragments :: column_link('id', 'User ID', 'tag')" />
+						</th>
+						<th th:replace="fragments :: column_link('firstName', 'First Name', 'none')" />
+						<th th:replace="fragments :: column_link('lastName', 'Last Name', 'none')" />	
+						
+						<th class="hideable-column">
+							<th th:replace="fragments :: column_link('email', 'E-mail', 'tag')" />
+						</th>					
+						
+						<th>
+							City
+						</th>
+						<th>
+							State
+						</th>
+						<th>
+							Country
+						</th>
+						
+						<th th:replace="fragments :: column_link('enabled', 'Enabled', 'none')" />						
+						<th>  </th>
+	
+					</tr>
+	
+				</thead>
+				<tbody>
+					<tr th:each="customer : ${listCustomers}">
+						<td class="hideable-column">[[${customer.id}]]</td>
+						<td>
+							<a title="View Details Of This Customer" 
+								th:href="@{'/customers/detail/'+${customer.id}}" 
+								class="link-detail"/>
+						[[${customer.firstName}]]
+						</td>
+						<td>[[${customer.lastName}]]</td>
+						<td class="hideable-column">[[${customer.email}]]</td>
+						<td>[[${customer.city} ]]</td>
+						<td>[[${customer.state} ]]</td>
+						<td>[[${customer.country.name} ]]</td>
+						
+						<td>
+							<div th:replace="fragments :: status(${customer.enabled}, 'customer', '/customers/' + ${customer.id})" />
+						</td>
+						
+						<td>
+						
+							<a class="fas fa-file-alt fa-2x icon-silver link-detail" 
+							th:href="@{'/customer/detail/' + ${customer.id}}", 
+							title="View details of this customer"></a>
+								&nbsp;
+							<div th:replace="fragments :: edit('customer', '/customers/edit/' + ${customer.id})" />
+							<div th:replace="fragments :: delete('customer', ${customer.id}, '/customers/delete/' + ${customer.id}, true)" />
+						</td>
+					</tr>
+				</tbody>
+				
+			</table>
+	</div>
+	
+	<div class="less-details">
+		<div th:each="customer : ${listCustomers}" class="row m-1">
+			<div class="col-4">
+				<b style="">[[${customer.fullName}]]</b>
+			</div>
+			<div class="col-8">
+				<div>[[${customer.country.name}]]</div>
+				<div class="mt-2">
+					<div th:replace="fragments :: status(${customer.enabled}, 'customer', '/customers/' + ${customer.id})" />
+					&nbsp; 			
+					<div th:replace="fragments :: edit('customer', '/customers/edit/' + ${customer.id})" />
+					&nbsp; 			
+					<div th:replace="fragments :: delete('customer', ${customer.id}, '/customers/delete/' + ${customer.id}, true)" />				
+				</div>
+			</div>
+			<div>&nbsp;</div>
+		</div>
+	</div>
+
+	<div th:replace="modal_fragments :: confirm_modal">
+	</div>
+
+	<div class="modal fade" id="detailModal">
+		<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					
+				</div>
+		</div>
+	</div>
+	
+	<div th:replace="fragments :: pagination('customers')"></div>
+	<div th:replace="fragments :: footer"></div>
+</div>
+
+<script th:src="@{/js/common_list.js}"></script>
+<script type="text/javascript">
+	moduleURL = "[[@{/customers}]]";
+
+	$(document).ready(function() {
+		$(".link-delete").on("click", function(e){
+			e.preventDefault();	
+			link = $(this);
+			//alert($(this).attr("href"));
+			
+			customerId = link.attr("customerId");
+			$("#yesButton").attr("href", link.attr("href"));
+			$("#confirmText").text("Are you sure you want to delete this Customer ID ");
+			$("#confirmModal").modal();
+		});
+		
+		$(".link-detail").on("click", function(e) {
+			e.preventDefault();
+			linkDetailURL = $(this).attr("href");
+			$("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
+		});				
+	});
+	
+	function clearFilter(){
+		window.location="[[@{/customers}]]";
+	}
+	
+</script>
+</body>
+
+</html>

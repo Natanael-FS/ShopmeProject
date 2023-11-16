@@ -22,7 +22,7 @@ public class Setting implements Serializable {
 	@Column(name = "`key`", nullable = false, length = 128)
 	private String key;
 	
-	@Column(nullable = false, length = 1024)	
+	@Column(name = "value", nullable = false, length = 1024)	
 	private String value;
 	
 	@Enumerated(EnumType.STRING)

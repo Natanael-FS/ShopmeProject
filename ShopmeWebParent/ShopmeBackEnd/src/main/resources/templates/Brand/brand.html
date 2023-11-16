@@ -19,20 +19,21 @@
 		
 	</div>
 	
-	<div th:replace="fragments :: search_form_and_message('/brands/page/1')">	</div>
+	<div th:replace="fragments :: search_form_and_message()">	</div>
 	
 	<div class="full-details">
 		<table class="table table-bordered table-hover table-striped table-responsive-xL">
 			<thead class ="thead-dark">
 				<tr>
 					<th class="hideable-column">
-						Brand ID	
+						<th th:replace="fragments :: column_link('id', 'Brand ID', 'tag')" />
 					</th>
+						
 					<th>
 						Logo
 					</th>
 					<th>
-						<th th:replace="fragments :: column_link('/brands','name', 'Brand Name', 'tag')" />
+						<th th:replace="fragments :: column_link('name', 'Brand Name', 'tag')" />
 					</th>
 					<!-- 
 					<th>
@@ -103,7 +104,7 @@
  -->	<div th:replace="modal_fragments :: confirm_modal"></div>
 
 	
-	<div th:replace="fragments :: pagination('/brands', 'brand')"></div>
+	<div th:replace="fragments :: pagination('brand')"></div>
 
 	<div th:replace="fragments :: footer"></div>
 </div>

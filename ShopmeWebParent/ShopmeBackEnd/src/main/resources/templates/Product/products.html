@@ -63,11 +63,11 @@
 			<thead class ="thead-dark">
 				<tr>
 					<th class="hideable-column">
-						<th th:replace="fragments :: column_link('/products','id', 'ID', 'tag')" />
+						<th th:replace="fragments :: column_link('id', 'ID', 'tag')" />
 					</th>
 					<th>Main Image</th>
 					<th class="hideable-column">
-						<th class="col-4" th:replace="fragments :: column_link('/products','name', 'Product Name', 'tag')" />
+						<th class="col-4" th:replace="fragments :: column_link('name', 'Product Name', 'tag')" />
 					</th> 	
 					<th>Brand</th> 
 					<th> Category </th>						
@@ -164,7 +164,7 @@
 	</div>
 	
 	
-	<div th:replace="fragments :: pagination('/products', 'product')"></div>
+	<div th:replace="fragments :: pagination('product')"></div>
 
 	<div th:replace="fragments :: footer"></div>
 </div>

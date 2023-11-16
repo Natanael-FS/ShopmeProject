@@ -18,23 +18,25 @@
 		
 	</div>
 	
-	<div th:replace="fragments :: search_form_and_message('/categories/page/1')" >	</div>
+	<div th:replace="fragments :: search_form_and_message()" >	</div>
 	
 	<div class="full-details">
 		<table class="table table-bordered table-hover table-striped table-responsive-xL">
 			<thead class ="thead-dark">
 				<tr>
-					<th>
-						ID	
+					<th class="hideable-column">
+						<th th:replace="fragments :: column_link('id', 'Category ID', 'tag')" />
 					</th>
 					<th>
 						Category Image
 					</th>
+					<!--
 						<th>
 							 <a class="text-white" th:href="@{'/categories/page/'+ ${currentPage} + '?sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' +keyword  : ''}}">Category Name</a>
 							<span th:class="${reverseSortDir == 'desc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}" ></span>	
 						</th>
-					<!-- <th th:replace="fragments :: column_link('/categories', 'name', 'Categories Name', 'none')" />	 -->
+					-->
+					 <th th:replace="fragments :: column_link('name', 'Categories Name', 'none')" />	
 												
 					<th class="hideable-column"> Alias </th>
 					<th> Enabled </th>						
@@ -85,20 +87,38 @@
 			 </div>
 		</div>
 	</div>
-<!--
+
+
 	<div th:if="${keyword != null}">
-		<span>Search result does not show categories in heirearchical form</span>
-			<div th:replace="fragments :: pagination('/categories', 'categories')"></div>
+			<span>Search result does not show categories in heirearchical form</span>
+			<div th:replace="fragments :: pagination('categories')"></div>
 	</div>
- -->
 	
-	<div th:replace="fragments :: pagination('/categories', 'top-level categories')"></div>
+	<div th:unless="${keyword != null}">
+		<div th:replace="fragments :: pagination('top-level categories')"></div>
+	</div>
+
+	<div th:replace="modal_fragments :: confirm_modal">	</div>
 
 	<div th:replace="fragments :: footer"></div>
 </div>
 </body>
 
 <script>
+	moduleURL = "[[@{/categories}]]";
+
+	$(document).ready(function() {
+		$(".link-delete").on("click", function(e){
+			e.preventDefault();	
+			link = $(this);
+			
+			categoryId = link.attr("categoryId");
+			$("#yesButton").attr("href", link.attr("href"));
+			$("#confirmText").text("Are you sure you want to delete this Category ID ?");
+			$("#confirmModal").modal();
+		});
+	});
+
 	function clearFilter(){
 		window.location="[[@{/categories}]]";
 	}

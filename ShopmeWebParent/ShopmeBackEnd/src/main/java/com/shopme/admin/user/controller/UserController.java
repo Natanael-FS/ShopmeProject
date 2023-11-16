@@ -22,6 +22,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.util.StringUtils;
 
 import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.paging.PagingAndSortingParam;
+import com.shopme.admin.paging.PagingandSortingHelper;
 import com.shopme.admin.user.UserNotFoundException;
 import com.shopme.admin.user.UserService;
 import com.shopme.admin.user.export.UserCsvExporter;
@@ -42,48 +44,15 @@ public class UserController {
 
 	
 	@GetMapping("/users")
-	public String listFirstPage(Model model) {
-
-		return listByPage(1, model, "firstName", "asc", null);
-		
-//		List<User> listusersList = userService.listAll();
-//		model.addAttribute("listUsers",listusersList);
-//		return"users";
+	public String listFirstPage() {
+		return "redirect:/users/page/1?sortField=firstName&sortDir=asc";
 	}
 	
 	@GetMapping("/users/page/{pageNum}")
-	public String listByPage(@PathVariable (name = "pageNum") int pageNum, Model model,
-			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword) {
+	public String listByPage(@PagingAndSortingParam(listName = "listUsers", moduleURL = "/users") PagingandSortingHelper helper,
+			@PathVariable (name = "pageNum") int pageNum) {
 		
-		System.out.println("SortDir :"+sortDir);
-		System.out.println("sort field : "+sortField);
-		
-		Page<User> page = userService.listByPage(pageNum,sortField,sortDir,keyword);
-		List<User> listUsers =  page.getContent();
-		
-		String reverseSortDirString = sortDir.equals("asc") ? "desc" : "asc";
-		System.out.println("reverseSortDirString : "+reverseSortDirString);
-//		System.out.println("Pagenum :"+pageNum);
-//		System.out.println("Total Element :"+page.getTotalElements());
-//		System.out.println("TotalPage"+page.getTotalPages());
-
-		long startCount = (pageNum-1) * userService.USERS_PER_PAGE + 1;
-		long endCount = startCount + userService.USERS_PER_PAGE - 1;
-		
-		if(endCount > page.getTotalElements()) {
-			endCount = page.getTotalElements();
-		}
-		
-		model.addAttribute("currentPage", pageNum);
-		model.addAttribute("totalPages", page.getTotalPages());
-		model.addAttribute("startCount", startCount);
-		model.addAttribute("endCount", endCount);
-		model.addAttribute("totalItems", page.getTotalElements());
-		model.addAttribute("listUsers", listUsers);
-		model.addAttribute("sortField", sortField);
-		model.addAttribute("sortDir", sortDir);
-		model.addAttribute("reverseSortDirString", reverseSortDirString);
-		model.addAttribute("keyword", keyword);
+		userService.listByPage(pageNum, helper);
 		
 		return"users/users";
 	}
@@ -122,10 +91,7 @@ public class UserController {
 				user.setPhotos(null);
 				 userService.save(user);
 		}
-		
-		System.out.println(user);	
-//		System.out.println(multipartFile.getOriginalFilename());
-		
+				
 		userService.save(user);
 		
 		redirectAttributes.addFlashAttribute("message", "The user has been saved successfully");

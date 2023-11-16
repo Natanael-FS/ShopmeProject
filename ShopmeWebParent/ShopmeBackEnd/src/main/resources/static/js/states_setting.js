@@ -1,5 +1,5 @@
 var buttonLoad;
-var dropDownCountry;
+var dropDownCountryForState;
 var dropDownStates;
 var buttonAddStates;
 var buttonUpdateStates;
@@ -10,7 +10,7 @@ var fieldCountryCode;
 
 $(document).ready(function() {
 	buttonLoad = $("#btnLoadCountriesForStates");
-	dropDownCountry = $("#dropDownCountriesForStates");
+	dropDownCountryForState = $("#dropDownCountriesForStates");
 	dropDownStates = $("#dropDownStates");
 	labelStatesName = $("#labelStatesName");
 	fieldStatesName = $("#fieldStatesName");
@@ -19,12 +19,12 @@ $(document).ready(function() {
 	buttonDeleteStates = $("#btnDeleteStates");
 	
 	buttonLoad.click(function() {
-		loadCountries();
+		loadCountriesForState();
 	});
 	
-	dropDownCountry.on("change", function(){
-		id = dropDownCountry.val().split("-")[0];
-		changeFormStateToSelectedCountry(id); 
+	dropDownCountryForState.on("change", function(){
+		id = dropDownCountryForState.val().split("-")[0];
+		changeFormStateToSelectedCountryForState(id); 
 	}); 
 
 	dropDownStates.on("change", function(){
@@ -48,14 +48,13 @@ $(document).ready(function() {
 	});	
 });
 
-function loadCountries(){
+function loadCountriesForState(){
 	url = contextPath + "countries/list";
 	$.get(url, function (responseJSON){
-		dropDownCountry.empty();
+		dropDownCountryForState.empty();
 		$.each(responseJSON, function(index, country){
 			optionValue = country.id + "-" + country.code;
-			$("<option>").val(optionValue).text(country.name).appendTo(dropDownCountry);
-				
+			$("<option>").val(optionValue).text(country.name).appendTo(dropDownCountryForState);
 		});
 	}).done(function() {
 		buttonLoad.val("Refresh Country List");
@@ -65,12 +64,13 @@ function loadCountries(){
 	});
 }
 
+
 function showToastMessage(message){
 	$("#toastMessage").text(message);
 	$(".toast").toast('show');
 }
 
-function changeFormStateToSelectedCountry(id){
+function changeFormStateToSelectedCountryForState(id){
 	url = contextPath + "states/list_by_country/"+id;
 	$.get(url, function (responseJSON){
 		dropDownStates.empty();
@@ -112,7 +112,17 @@ function changeFormStateToNew(){
 	}
 }
 
+function validateFormState(){
+	formState = document.getElementById("formState");
+	if(!formState.checkValidity()){
+		formState.reportValidity();
+		return false;
+	}
+	return true;
+}
+
 function addStates(){
+	if(!validateFormState()) return;
 	url = contextPath + "states/save";
 	stateName = fieldStatesName.val();
 	selectedCountry = $("#dropDownCountriesForStates option:selected");

@@ -35,6 +35,7 @@ public class CountryRepositoryTest {
 		List<Country> listCountries = repo.findAllByOrderByNameAsc();
 		listCountries.forEach(System.out::println);
 
+		System.out.println("size : " + listCountries.size());
 //		assertThat(listCountries.size()).isGreaterThan(0);
 	}
 

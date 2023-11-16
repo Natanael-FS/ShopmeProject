@@ -18,6 +18,7 @@ import org.springframework.test.annotation.Rollback;
 import com.shopme.admin.state.StatesRepository;
 import com.shopme.common.entity.Country;
 import com.shopme.common.entity.State;
+import com.shopme.common.entity.StateDTO;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)

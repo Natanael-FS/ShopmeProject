@@ -22,6 +22,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shopme.admin.FileUploadUtil;
 import com.shopme.admin.categories.CategoriesService;
+import com.shopme.admin.paging.PagingAndSortingParam;
+import com.shopme.admin.paging.PagingandSortingHelper;
 import com.shopme.admin.brand.export.BrandCsvExporter;
 import com.shopme.admin.brand.export.BrandExcelExporter;
 import com.shopme.admin.brand.export.BrandPdfExporter;
@@ -41,40 +43,16 @@ public class BrandController {
 	
 	
 	@GetMapping("/brands")
-	public String getBrand(@Param("sortDir") String sortDir, Model model) {
-		return listByPage(1,"asc","name",model, null);
+	public String getBrand() {
+		return "redirect:/brands/page/1?sortField=name&sortDir=asc";
 	} 
 	
 	@GetMapping("/brands/page/{pageNum}")
-	public String listByPage(@PathVariable(name="pageNum") int pageNum, @Param("sortDir") String sortDir, @Param("sortField") String sortField,
-			Model model, @Param("keyword") String keyword) {
+	public String listByPage(@PagingAndSortingParam(listName = "listBrands", moduleURL = "/brands") PagingandSortingHelper helper,
+			@PathVariable (name = "pageNum") int pageNum) {
+		
+		service.listByPage(pageNum, helper);
 
-		System.out.println("SortDir :"+sortDir);
-		
-		Page<Brand> page = service.listByPage(pageNum,sortField,sortDir,keyword);
-		List<Brand> listBrands =  page.getContent();
-		
-		String reverseSortDirString = sortDir.equals("asc") ? "desc" : "asc";
-		System.out.println("reverseSortDirString : "+reverseSortDirString);
-
-		long startCount = (pageNum-1) * service.BRANDS_PER_PAGE + 1;
-		long endCount = startCount + service.BRANDS_PER_PAGE - 1;
-		
-		if(endCount > page.getTotalElements()) {
-			endCount = page.getTotalElements();
-		}
-		
-		model.addAttribute("currentPage", pageNum);
-		model.addAttribute("totalPages", page.getTotalPages());
-		model.addAttribute("startCount", startCount);
-		model.addAttribute("endCount", endCount);
-		model.addAttribute("totalItems", page.getTotalElements());
-		model.addAttribute("listBrands", listBrands);
-		model.addAttribute("sortField", sortField);
-		model.addAttribute("sortDir", sortDir);
-		model.addAttribute("reverseSortDirString", reverseSortDirString);
-		model.addAttribute("keyword", keyword);
-		
 		return "Brand/brand";
 	}
 	

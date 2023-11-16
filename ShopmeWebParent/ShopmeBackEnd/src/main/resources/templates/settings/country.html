@@ -19,15 +19,16 @@
 		</select>
 	</div>
 	
-	<div class="form-group row ml-2 mt-4">
+	<form id="formCountry">
+		<div class="form-group row ml-2 mt-4">
 	    <label class="col-form-label" id="labelCountryName">Country Name: </label>
 	    <div class="col-md">
-		    <input type="text" class="form-control" id="fieldCountryName" />    
+		    <input type="text" class="form-control" id="fieldCountryName" required minlength="3" maxlength="45"/>    
 	    </div>
 
 	    <label class="col-form-label" id="labelCountryCode">Code: </label>
 	    <div class="col-md">
-		    <input type="text" class="form-control" id="fieldCountryCode" minlength="3"/>    
+		    <input type="text" class="form-control" id="fieldCountryCode" required minlength="2" maxlength="45"/>    
 	    </div>
 
 		<div class="col-lg-4 mt-1">
@@ -36,7 +37,9 @@
 		    <input type="button" id="btnDeleteCountry" value="Delete" class="btn btn-secondary " disabled="disabled">  </input>
 		</div>	    
 	</div>	
-		
+
+	</form>
+			
 </div>
 
 </body>

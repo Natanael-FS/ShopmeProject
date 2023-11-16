@@ -6,25 +6,9 @@
 	
 	<div th:replace="navigation :: menu"></div>
 
-
-<!-- 
-		<a th:href="@{/users/new}" class="fa-solid fa-user-plus fa-2x icon-dark"></a>	
-		&nbsp;|&nbsp;&nbsp;
-		<a th:href="@{/users/export/csv}" class="fa-solid fa-file-csv fa-2x icon-dark"></a>
-		&nbsp;|&nbsp;&nbsp;
-		<a th:href="@{/users/export/excel}" class="fa-regular fa-file-excel fa-2x icon-dark"></a>
-		&nbsp;|&nbsp;&nbsp;
-		<a th:href="@{/users/export/pdf}" class="fa-regular fa-file-pdf fa-2x icon-dark"></a>
--->	
-		
 	<div>
 		<h1>Manage Users  </h1>
-		<!-- 
-			<a th:href="@{/users/new}" style="text-decoration: none;" class="fas fa-user-plus fa-2x icon-dark mr-2"></a>
-			<a th:href="@{/users/export/csv}" style="text-decoration: none;" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
-			<a th:href="@{/users/export/excel}" style="text-decoration: none;" class="fas fa-file-excel fa-2x icon-dark mr-2"></a>		
-			<a th:href="@{/users/export/pdf}" style="text-decoration: none;" class="fas fa-file-pdf fa-2x icon-dark"></a>	
-			-->
+
 		<a th:href="@{/users/new}">Create New User</a>	
 		&nbsp;|&nbsp;
 		<a th:href="@{/users/export/csv}">Export to CSV</a>
@@ -35,31 +19,31 @@
 		
 	</div>
 	
-	<div th:replace="fragments :: search_form_and_message('/users/page/1')" >	</div>
+	<div th:replace="fragments :: search_form_and_message()" >	</div>
 	
 	<div class="full-details">
 			<table class="table table-bordered table-hover table-striped table-responsive-xL">
 				<thead class ="thead-dark">
 					<tr>
 						<th class="hideable-column">
-							<th th:replace="fragments :: column_link('/users','id', 'User ID', 'tag')" />
+							<th th:replace="fragments :: column_link('id', 'User ID', 'tag')" />
 						</th>
 						<th>
 							Photos
 						</th>
 						
 						<th class="hideable-column">
-							<th th:replace="fragments :: column_link('/users','email', 'E-mail', 'tag')" />
+							<th th:replace="fragments :: column_link('email', 'E-mail', 'tag')" />
 						</th>					
 	
-						<th th:replace="fragments :: column_link('/users','firstName', 'First Name', 'none')" />
-						<th th:replace="fragments :: column_link('/users','lastName', 'Last Name', 'none')" />	
+						<th th:replace="fragments :: column_link('firstName', 'First Name', 'none')" />
+						<th th:replace="fragments :: column_link('lastName', 'Last Name', 'none')" />	
 						
 						<th>
 							Roles
 						</th>
 						
-						<th th:replace="fragments :: column_link('/users','enabled', 'Enabled', 'none')" />						
+						<th th:replace="fragments :: column_link('enabled', 'Enabled', 'none')" />						
 						<th>  </th>
 	
 					</tr>
@@ -111,7 +95,7 @@
 		</div>
 	</div>
 	
-	<div th:replace="fragments :: pagination('/users', 'users')"></div>
+	<div th:replace="fragments :: pagination('users')"></div>
 
 	<div class="modal fade text-center" id="confirmModal">
 		<div class="modal-dialog">
